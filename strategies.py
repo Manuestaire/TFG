@@ -13,6 +13,9 @@ about the game's progress.
 
 import numpy
 import pandas as pd
+import os
+import time
+import copy
 
 
 class Strategy(object):
@@ -41,15 +44,37 @@ class Strategy(object):
 class Manu(Strategy):
     df = pd.DataFrame()
     def bid(self, private_information, public_information):
-        self.df = self.df.append(public_information.copy(),ignore_index=True)
-        return 4, False
+
+        df_players = pd.DataFrame(public_information['players']).squeeze()
+        public_info = copy.deepcopy(public_information)
+        del public_info['players']
+        public_info = pd.Series(public_info)
+
+        row_df= pd.concat([public_info,df_players]).to_frame().T
+#hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
+
+        self.df = self.df.append(row_df,ignore_index=True)
+        ##self.df = self.df.insert(-1,value=df_players)
+        #self.df = self.df.append(df_players,ignore_index=True)
+        #self.df = pd.concat([self.df,df_players],axis=1)
+
+        launch=False
+
+        return 4, launch
+
     def join_launch(self, private_information, public_information):
         print("JOIN LAUNCH?")
         return True
+
     def begin(self, private_information, public_information):
         print("GAME ABOUT TO BEGIN!!")
+
     def end(self, private_information, public_information):
-        self.df.to_csv('result.csv',sep=';')
+        timestr = time.strftime("%Y%m%d_%H%M%S")
+        outdir = "./data"
+        if not os.path.exists(outdir):
+            os.mkdir(outdir)
+        self.df.to_csv(outdir+'/'+timestr+'_result.csv',sep=';')
         print("END  OF THE GAME")
 
 
