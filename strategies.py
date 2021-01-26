@@ -42,7 +42,8 @@ class Strategy(object):
         return True
 
 class Manu(Strategy):
-    df = pd.DataFrame()
+    game_df = pd.DataFrame()
+    bd_df = pd.DataFrame()
     def bid(self, private_information, public_information):
 
         df_players = pd.DataFrame(public_information['players']).squeeze()
@@ -53,7 +54,7 @@ class Manu(Strategy):
         row_df= pd.concat([public_info,df_players]).to_frame().T
 #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
 
-        self.df = self.df.append(row_df,ignore_index=True)
+        self.game_df = self.game_df.append(row_df,ignore_index=True)
         ##self.df = self.df.insert(-1,value=df_players)
         #self.df = self.df.append(df_players,ignore_index=True)
         #self.df = pd.concat([self.df,df_players],axis=1)
@@ -68,13 +69,24 @@ class Manu(Strategy):
 
     def begin(self, private_information, public_information):
         print("GAME ABOUT TO BEGIN!!")
+        for root, dirs, filenames in os.walk('./data'):
+            for name in filenames:
+                if(name.endswith('.csv')):
+                    path = root+'/'+name
+                    print(path)
+                    file_df = pd.read_csv(path,sep=';')
+                    file_df.head()
+                    self.bd_df = pd.concat([self.bd_df,file_df],axis=0,ignore_index=True)
+                    self.bd_df.to_csv('result_db.csv',sep=';')
+                else:
+                    print("UNKNOWN FILE EXT:"+root+'/'+name)
 
     def end(self, private_information, public_information):
         timestr = time.strftime("%Y%m%d_%H%M%S")
         outdir = "./data"
         if not os.path.exists(outdir):
             os.mkdir(outdir)
-        self.df.to_csv(outdir+'/'+timestr+'_result.csv',sep=';')
+        self.game_df.to_csv(outdir+'/'+timestr+'_result.csv',sep=';')
         print("END  OF THE GAME")
 
 
