@@ -13,6 +13,7 @@ about the game's progress.
 
 import numpy
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 import time
 import copy
@@ -69,17 +70,24 @@ class Manu(Strategy):
 
     def begin(self, private_information, public_information):
         print("GAME ABOUT TO BEGIN!!")
+        frames=[]
         for root, dirs, filenames in os.walk('./data'):
             for name in filenames:
                 if(name.endswith('.csv')):
                     path = root+'/'+name
                     print(path)
-                    file_df = pd.read_csv(path,sep=';')
-                    file_df.head()
-                    self.bd_df = pd.concat([self.bd_df,file_df],axis=0,ignore_index=True)
-                    self.bd_df.to_csv('result_db.csv',sep=';')
+                    file_df = pd.read_csv(path,sep=';',index_col=0)                    
+                    file_df.columns = file_df.columns.str.replace(" ", "")
+                    #self.bd_df = self.bd_df.append(file_df,ignore_index=True,sort=False)[file_df.columns.tolist()]
+                    frames.append(file_df)
                 else:
                     print("UNKNOWN FILE EXT:"+root+'/'+name)
+        self.bd_df = pd.concat(frames)
+        self.bd_df.to_csv('result_db.csv',sep=';')
+        print("NO MORE FILES TO PARSE")
+
+        # we need to drop the values where the round does not advance
+        #(self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].mean()
 
     def end(self, private_information, public_information):
         timestr = time.strftime("%Y%m%d_%H%M%S")
