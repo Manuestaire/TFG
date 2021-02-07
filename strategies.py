@@ -88,6 +88,9 @@ class Manu(Strategy):
 
         # we need to drop the values where the round does not advance
         #(self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].mean()
+        #histograma:
+        #(self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].hist(bins='auto')
+        #plt.show()
 
     def end(self, private_information, public_information):
         timestr = time.strftime("%Y%m%d_%H%M%S")
