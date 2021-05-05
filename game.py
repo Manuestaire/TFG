@@ -49,6 +49,7 @@ class Game(object):
         'last_winning_bidders': None,
         'auction_round': None,
         'last_winning_miner': None,
+        'last_launchers': None,
         'last_mining_payoff': None,
     }
 
@@ -144,6 +145,7 @@ class Game(object):
             Assign payoff to winner.
         """
         launchers = list()
+        launchers_names = list()
         weights = list()
         for player in self.players:
             """
@@ -156,6 +158,9 @@ class Game(object):
                 weights.append(float(player.tech))
                 player.bankroll -= self.LAUNCH_COST
 
+        for p in launchers:
+            launchers_names.append(p.name)
+        self.public_information['last_launchers'] = launchers_names
         disaster = Player(strategy=None, name="Mission failure")
         disaster.tech = self.FAILURE_RATE_ATTENUATION**self.round * self.FAILURE_RATE * sum(weights)
         launchers.append(disaster)
