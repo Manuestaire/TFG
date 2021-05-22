@@ -12,6 +12,7 @@ about the game's progress.
 """
 
 import numpy
+import math
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
@@ -19,6 +20,7 @@ import time
 import copy
 
 from aux_functions import *
+from offline_analysis import lognormData
 
 
 class Strategy(object):
@@ -49,29 +51,41 @@ class Manu(Strategy):
     bd_df = pd.DataFrame()
     players_tech_count = {}
 
+    br_expect=12.70805407824309 #TODO
+    payoff_expect= 26.76786969043813 #TODO
+    unkn_expect= payoff_expect - br_expect
+
+    tech_cost = 5
     prev_tech = 0
+    prev_bid = 2
+    eliminated_player_count=0
     launched = False
     def addRow(self, private_information, public_information):
-        tech_gain = private_information['tech']-self.prev_tech if not self.launched else private_information['tech']
-        df_players = pd.DataFrame(public_information['players']).reset_index(drop=True)
-        public_info = copy.deepcopy(public_information)
-        del public_info['players']
+        try:
+            tech_gain = private_information['tech']-self.prev_tech if not self.launched else private_information['tech']
+            df_players = pd.DataFrame(public_information['players']).reset_index(drop=True)
+            public_info = copy.deepcopy(public_information)
+            del public_info['players']
 
-        row=pd.DataFrame.from_dict(public_info,orient='index').T.infer_objects()
-        row_df= pd.concat([row,df_players],axis=1)
+            row=pd.DataFrame.from_dict(public_info,orient='index').T.infer_objects()
+            row_df= pd.concat([row,df_players],axis=1)
 
 
-        row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
-        #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
+            row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
+            #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
 
-        row_df.at[0,'tech_gain_passive' if public_info['auction_round']<=1 else 'tech_gain_bid']=tech_gain
+            row_df.at[0,'tech_gain_passive' if public_info['auction_round']<=1 else 'tech_gain_bid']=tech_gain
+        except Exception:
+            print('Error al generar fila en la ronda ',public_info['round'])
         self.game_df = self.game_df.append(row_df,ignore_index=True) #add row to game_df
         return row_df
 
     def bid(self, private_information, public_information):
 
         self.addRow(private_information, public_information)
+        self.tech_cost+=5
         
+        eliminated_player_count=0
         if(public_information['auction_round']==1): #Hubo lanzamiento en la ronda anterior
             if(public_information['last_launchers'] != None):
                 # print('hola')
@@ -79,6 +93,7 @@ class Manu(Strategy):
                      self.players_tech_count[launcher]=0
             for player, data in public_information['players'].items():
                 if(data['bankroll']<0):
+                    eliminated_player_count+=1
                     self.players_tech_count[player]=0 #lo fuerzo a cero para evitar que influya en la toma de decision
                 else:
                     self.players_tech_count[player]+=1
@@ -90,32 +105,100 @@ class Manu(Strategy):
         ##self.df = self.df.insert(-1,value=df_players)
         #self.df = self.df.append(df_players,ignore_index=True)
         #self.df = pd.concat([self.df,df_players],axis=1)
-
+        
+        ## bid & launch decision: ##
+        bid_amount=self.prev_bid
         launch=False
+        
+        player_tech_expected=copy.deepcopy(self.players_tech_count)
+        player_tech_expected.update((k,v*5) for k,v in player_tech_expected.items()) 
 
-        #Memory vars:
+        launchdecision_threshold=0.6
+        basereward_mod=numpy.sqrt((public_information['base_reward']/self.br_expect)+0.125)
+        launch = (private_information['tech']/sum(player_tech_expected.values()))*basereward_mod > launchdecision_threshold #+failure_chance #and expected reward is greater than tech invested?
+        if launch:
+            self.tech_cost=0
+            print('ELIJO LANZAR')
+
+
+        #cálculo de won_bids:
+        counts=(self.game_df.tail(5)['last_winning_bidders'].value_counts())
+        i=0
+        won_bids=0
+        shared_wins=0
+        for key,value in counts.iteritems():
+            if 'Manu' in key:
+                won_bids+=value
+                if key != ['Manu']:
+                    shared_wins+=value
+        total_bids=sum(counts)
+
+        raisebid_factor = 0.6
+        #lógica de bid_amount:
+        if((won_bids-shared_wins)/total_bids > (raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
+            bid_amount= min(math.ceil(self.prev_bid/2)+1,self.prev_bid-1)
+        elif('Manu' not in public_information['last_winning_bidders']):
+            bid_amount=self.prev_bid+3
+        elif(['Manu']!=public_information['last_winning_bidders']):
+            bid_amount=self.prev_bid+1 #si comparto la victoria sólo subo la apuesta lo mínimo
+        else:
+            bid_amount-=1 #si la gané yo sólo voy reduciendo de uno en uno
+
+        bid_amount=max(0,bid_amount)
+
+        risk_factor=1 #should be close to 1
+        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*risk_factor):
+            bid_amount=1
+
+        # for sublist in counts.index.values:
+        #     if 'Manu' in sublist:
+        #         print("found")
+        #         counts[sublist]
+
+        #if 
+
+        ## Memory vars: ##
         self.launched=launch
         self.prev_tech=private_information['tech']
+        self.prev_bid=bid_amount
 
-        return 4, launch
+        return bid_amount, launch
 
     def join_launch(self, private_information, public_information):
         
+        #### BEGIN CRONS ####
+        #actualizo el no. de veces que han conseguido tecnología los jugadores
         if(public_information['last_winning_bidders']!=None):
             for player in public_information['last_winning_bidders']:
                 self.players_tech_count[player]+=1
         
-        self.game_df.loc[self.game_df.index[-1],'tech_at_join']=private_information['tech']
+        self.game_df.loc[self.game_df.index[-1],'tech_at_join']=private_information['tech'] #rellenamos el campo "tech_at_join"
 
+        #si he ganado la puja actualizo el campo "last_winning_bid"
         if 'Manu' in public_information['last_winning_bidders']:
             tech_gain_bid = private_information['tech'] - self.prev_tech
+            self.tech_cost+=public_information['last_winning_bid']
             self.game_df.loc[self.game_df.index[-1],'tech_gain_bid']=tech_gain_bid
 
-
+        #actualizo variables de memoria
         self.prev_tech=private_information['tech']
+        #### END CRONS ####
+
         print("JOIN LAUNCH?")
 
-        joining_launch=True
+        player_tech_expected=copy.deepcopy(self.players_tech_count)
+        player_tech_expected.update((k,v*5) for k,v in player_tech_expected.items()) 
+        
+        #joining_launch = (private_information['tech']/sum(player_tech_expected.values()))*(public_information['base_reward']/br_expect) > 0.4 #+failure_chance #and expected reward is greater than tech invested?
+        joindecision_threshold=0.4
+        basereward_mod=numpy.sqrt((public_information['base_reward']/self.br_expect)+0.125)
+        joining_launch = (private_information['tech']/sum(player_tech_expected.values()))*basereward_mod > joindecision_threshold
+        if joining_launch:
+            self.tech_cost=0
+            print('ELIJO UNIRME')
+
+        #joining_launch=True
+        ## Memory vars: ##
         self.launched|=joining_launch
 
         return joining_launch
@@ -125,6 +208,18 @@ class Manu(Strategy):
         self.players_tech_count = {p:0 for p in public_information['players'].keys()}
         # for name in public_information['players'].keys():
         #     self.players_tech_count[name]=0
+
+        #### BEGIN Read persistent data from offline analysis ####
+        filepath="./analysis/_results.csv"
+        if os.path.exists(filepath):
+            persistent_data = pd.read_csv(filepath,sep=';',index_col=0)
+            distrib_data=persistent_data.tail(1)
+            base_reward_dist=lognormData(distrib_data['base_reward_mean'],distrib_data['base_reward_variance'], distrib_data['base_reward_location'])
+            payoff_dist = lognormData(distrib_data['mining_payoff_mean'],distrib_data['mining_payoff_variance'], distrib_data['mining_payoff_location'])
+        else:
+            print("ERROR: couldn't find persistance data from offline analysis")
+        #### END Read persistent data ####
+
         frames=[]
         for root, dirs, filenames in os.walk('./data'):
             for name in filenames:
@@ -142,23 +237,37 @@ class Manu(Strategy):
         self.bd_df.to_csv('result_db.csv',sep=';')
         print("NO MORE FILES TO PARSE")
 
+        #### BEGIN fitness tests ####
+        sample_df=pd.concat(frames[-2:])
+        mining_payoff=(sample_df.loc[sample_df['auction_round']==1])['last_mining_payoff'].dropna()
+        t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
+        if(t_stat>0.46136):
+            print("Null hypothesis rejected, PAYOFF sample does not belong to given distribution")
+            input("Press enter to continue")
+        base_reward=(sample_df.loc[sample_df['auction_round']==1])['base_reward'].dropna()
+        t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
+        if(t_stat>0.46136):
+            print("Null hypothesis rejected, BASE REWARD sample does not belong to given distribution")
+            input("Press enter to continue")
+        #### END fitness tests ####
+
         if self.bd_df.size > 0 :
             # we need to drop the values where the round does not advance
             #(self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].mean()
             #histograma:
-            m_mean,m_var=lognorm_estimate((self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].dropna())
+            m_mean,m_var=lognorm_estimate((self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].dropna().astype(numpy.float32))
             print('mining_payoff mean:'+str(m_mean)+' var:'+str(m_var))
             
             # won_tech= self.bd_df['tech'] - self.bd_df['tech'].shift(1)  
             # corrected_won_tech= copy.deepcopy(won_tech)
             # corrected_won_tech[corrected_won_tech<0] = self.bd_df['tech'] #<-aquí tengo la tecnología ganada en mantenimiento cada ronda
-            won_tech_passive=self.bd_df['tech_gain_passive']
-            won_tech_passive.dropna().hist(bins=numpy.arange(-1,11)+0.5,density=True)
-            plt.title('tech_gain_passive')     
-            # plt.show()
-            won_tech_bid=self.bd_df['tech_gain_bid']
-            won_tech_bid.dropna().hist(bins=numpy.arange(-1,11)+0.5,density=True)
-            plt.title('tech_gain_bid') 
+            # won_tech_passive=self.bd_df['tech_gain_passive']
+            # won_tech_passive.dropna().hist(bins=numpy.arange(-1,11)+0.5,density=True)
+            # plt.title('tech_gain_passive')     
+            # # plt.show()
+            # won_tech_bid=self.bd_df['tech_gain_bid']
+            # won_tech_bid.dropna().hist(bins=numpy.arange(-1,11)+0.5,density=True)
+            # plt.title('tech_gain_bid') 
             # plt.show()
 
             #new_df = pd.concat([won_tech,corrected_won_tech],axis=1) #debugging
@@ -169,8 +278,8 @@ class Manu(Strategy):
             #aux=(shifted_df['last_winning_bidders'].dropna().str.contains('Manu')).fillna(value=False)
 
 
-            (self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].dropna().hist(bins='auto') 
-            plt.title('mining payoff')     
+            # (self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].dropna().hist(bins='auto') 
+            # plt.title('mining payoff')     
             # plt.show()
             # (self.bd_df.loc[self.bd_df['tech']!=self.bd_df['tech_at_join']!=])['tech_at_join'].dropna().hist(bins='auto')
             # plt.figure(1)
@@ -180,10 +289,19 @@ class Manu(Strategy):
 
     def end(self, private_information, public_information):
         self.addRow(private_information, public_information)
+        ax=None
+        self.game_df.loc[:,"SpongeBob":"Evie"].plot(ax=ax)
+        self.game_df[["round","auction_round"]].plot(ax=ax)
+        plt.show()
         timestr = time.strftime("%Y%m%d_%H%M%S")
         outdir = "./data"
         if not os.path.exists(outdir):
             os.mkdir(outdir)
+        path = outdir+'/'+timestr+'_result.csv'
+        char = 'b'
+        while os.path.exists(path):
+            path = outdir+'/'+timestr+'_'+char+'_result.csv'
+            char = chr(ord(char) + 1)
         self.game_df.to_csv(outdir+'/'+timestr+'_result.csv',sep=';')
         print("END  OF THE GAME")
 
