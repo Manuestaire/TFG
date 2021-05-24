@@ -21,6 +21,14 @@
             "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"600",
                    "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"100"},
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Multirun",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\multirun.py",
+            "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"60",
+                   "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"10"}
         }
     ]
 }
