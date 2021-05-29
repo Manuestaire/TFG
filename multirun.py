@@ -92,10 +92,10 @@ def runcampaign(params,multiprocess_run=True):
                     print('Error al leer archivo ',path)
             else:
                 print("UNKNOWN FILE EXTENSION:"+root+'/'+name)
+    obj = 0
+    games_in_campaign=0
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
-        obj = 0
-        games_in_campaign=0
         for frame in frames:
             aux = frame.loc[frame['Manu']<0,'round']
             z = 0
@@ -108,7 +108,7 @@ def runcampaign(params,multiprocess_run=True):
             if not math.isnan(z):
                 obj+=z
                 games_in_campaign+=1
-        print(z)
+        print(obj/games_in_campaign)
         df.iloc[-1,-1]=obj/games_in_campaign
         df.to_csv(filepath,sep=';')
 
