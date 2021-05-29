@@ -8,7 +8,7 @@
             "name": "Python: Space Mining Poker",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\smp.py",
+            "program": "${workspaceFolder}/smp.py",
             "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"600",
                    "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"100"},
             "console": "integratedTerminal"
@@ -17,7 +17,7 @@
             "name": "Offline Analisys",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\offline_analysis.py",
+            "program": "${workspaceFolder}/offline_analysis.py",
             "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"600",
                    "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"100"},
             "console": "integratedTerminal"
@@ -26,7 +26,7 @@
             "name": "Multirun",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\multirun.py",
+            "program": "${workspaceFolder}/multirun.py",
             "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"60",
                    "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"10"}
         }
