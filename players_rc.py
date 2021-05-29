@@ -21,6 +21,6 @@ player_dict = {
     'AlwaysLauncher' : AlwaysLaunch(),
     'AggressiveLauncher' : AggressiveLauncher(),
     'Manu' : Manu(),
-    'Observer' : Observer(),
+    #'Observer' : Observer(),
     'Evie' : EVBot(),
 }

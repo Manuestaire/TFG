@@ -231,7 +231,7 @@ def analyze(sample_df : pd.DataFrame, show_figures=True):
 
 
 
-            return_data = paramData(getUniformParams(won_tech_passive),getUniformParams(won_tech_bid),base_reward_data,payoff_data,ttest_result)
+            return_data = paramData(getUniformParams(won_tech_passive),getUniformParams(won_tech_bid),base_reward_data,payoff_data,[0,0,0]) # ttest_result
             return_data.to_file()
 
             #new_df = pd.concat([won_tech,corrected_won_tech],axis=1) #debugging
