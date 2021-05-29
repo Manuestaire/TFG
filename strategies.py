@@ -316,10 +316,10 @@ class Manu(Strategy):
         if os.path.exists(filepath):
             campaign_data = pd.read_csv(filepath,sep=';',index_col=0).iloc[-1]
             self.campaign_folder='/campaign_'+campaign_data['date']
-        self.joindecision_threshold=campaign_data['joindecision_threshold']
-        self.launchdecision_threshold=campaign_data['launchdecision_threshold']
-        self.raisebid_factor = campaign_data['raisebid_factor']
-        self.risk_factor=campaign_data['risk_factor']
+            self.joindecision_threshold=campaign_data['joindecision_threshold']
+            self.launchdecision_threshold=campaign_data['launchdecision_threshold']
+            self.raisebid_factor = campaign_data['raisebid_factor']
+            self.risk_factor=campaign_data['risk_factor']
 
         #### BEGIN Read persistent data from offline analysis ####
         filepath="./analysis/_results.csv"
