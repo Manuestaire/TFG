@@ -1,6 +1,7 @@
 import subprocess
 import time
 import os
+import signal
 import math
 import pandas as pd
 from scipy.optimize import minimize
@@ -116,11 +117,24 @@ def runcampaign(params,multiprocess_run=True):
 
 
 def main():
-    print("Hello World!")
-    initial_guess=[0.5,0.5,0.5,0.5]
-    boundaries=((0,1),(0,1),(0,1),(0,1))
-    res=minimize(runcampaign,x0=[initial_guess],bounds=boundaries,options={"maxiter":4})
-    print(res)
+    try:
+        print("Hello World!")
+        #### SIGNAL HANDLERS ####
+        signal.signal(signal.SIGINT, prepare_exit)
+        signal.signal(signal.SIGTERM, prepare_exit)
+
+        initial_guess=[0.5,0.5,0.5,0.5]
+        boundaries=((0,1),(0,1),(0,1),(0,1))
+        res=minimize(runcampaign,x0=[initial_guess],bounds=boundaries,options={"maxiter":4})
+        print(res)
+    finally:
+        prepare_exit()
+        
+
+
+def prepare_exit():
+    if os.path.exists('campaigndata.csv'):
+            os.rename('campaigndata.csv','campaigndata_'+time.strftime("%Y%m%d_%H%M%S")+'.csv')
 
 if __name__ == "__main__":
     main()
