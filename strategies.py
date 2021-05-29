@@ -148,10 +148,10 @@ class Manu(Strategy):
             elif private_information['tech']  > max(player_tech_expected.values()) or  private_information['tech']<=2 :
                 bid_amount = self.UPKEEP_COST #si ya estamos por delante pujamos el coste de mantenimiento
             else:
-                bid_amount = min(self.game_df['last_winning_bid'].tail(-1).min(),self.UPKEEP_COST)
+                bid_amount = min(self.game_df['last_winning_bid'].iloc[-1].min(),self.UPKEEP_COST)
         else: #no lanzamos este turno
             if private_information['tech']+self.TECH_EXPECTATION > max(player_tech_expected.values()) and private_information['tech'] < max(player_tech_expected.values()):
-                bid_amount = min(self.game_df['last_winning_bid'].tail(-1).min(),self.UPKEEP_COST)
+                bid_amount = min(self.game_df['last_winning_bid'].iloc[-1].min(),self.UPKEEP_COST)
             else:
                 bid_amount = 1
             
@@ -224,7 +224,7 @@ class Manu(Strategy):
 
 
         #cálculo de won_bids:
-        counts=(self.game_df.tail(5)['last_winning_bidders'].value_counts())
+        counts=(self.game_df['last_winning_bidders'].tail(5).value_counts())
         i=0
         won_bids=0
         shared_wins=0
@@ -325,7 +325,7 @@ class Manu(Strategy):
         filepath="./analysis/_results.csv"
         if os.path.exists(filepath):
             persistent_data = pd.read_csv(filepath,sep=';',index_col=0)
-            distrib_data=persistent_data.tail(1)
+            distrib_data=persistent_data.iloc[-1]
             base_reward_dist=lognormData(distrib_data['base_reward_mean'],distrib_data['base_reward_variance'], distrib_data['base_reward_location'])
             payoff_dist = lognormData(distrib_data['mining_payoff_mean'],distrib_data['mining_payoff_variance'], distrib_data['mining_payoff_location'])
 
@@ -336,30 +336,53 @@ class Manu(Strategy):
             print("ERROR: couldn't find persistance data from offline analysis")
         #### END Read persistent data ####
 
-        frames=[]
+        # frames=[]
+        # filename_list=[]
+        # for root, dirs, filenames in os.walk('./data'):
+        #     for name in filenames:
+        #         if(name.endswith('.csv')):
+        #             path = root+'/'+name
+        #             filename_list.append(path)
+        #             print(path)
+        #             try:
+        #                 file_df = pd.read_csv(path,sep=';',index_col=0)                    
+        #                 file_df.columns = file_df.columns.str.replace(" ", "")
+        #                 #self.bd_df = self.bd_df.append(file_df,ignore_index=True,sort=False)[file_df.columns.tolist()]
+        #                 frames.append(file_df)
+        #             except Exception as e:
+        #                 print('Error al leer archivo ',path)
+        #                 print(e)
+        #         else:
+        #             print("UNKNOWN FILE EXT:"+root+'/'+name)
+        
+        filename_list=[]
         for root, dirs, filenames in os.walk('./data'):
             for name in filenames:
                 if(name.endswith('.csv')):
                     path = root+'/'+name
-                    print(path)
-                    try:
-                        file_df = pd.read_csv(path,sep=';',index_col=0)                    
-                        file_df.columns = file_df.columns.str.replace(" ", "")
-                        #self.bd_df = self.bd_df.append(file_df,ignore_index=True,sort=False)[file_df.columns.tolist()]
-                        frames.append(file_df)
-                    except Exception as e:
-                        print('Error al leer archivo ',path)
-                        print(e)
+                    filename_list.append(path)
                 else:
                     print("UNKNOWN FILE EXT:"+root+'/'+name)
+        frames=[]
+        for filename in filename_list[-25:]:
+            try:
+                print(filename)
+                file_df = pd.read_csv(filename,sep=';',index_col=0)                    
+                file_df.columns = file_df.columns.str.replace(" ", "")
+                #self.bd_df = self.bd_df.append(file_df,ignore_index=True,sort=False)[file_df.columns.tolist()]
+                frames.append(file_df)
+            except Exception as e:
+                print('Error al leer archivo ',filename)
+                print(e)
+
         if (len(frames)>0):
             self.bd_df = pd.concat(frames)
-        self.bd_df.to_csv('result_db.csv',sep=';')
+        # self.bd_df.to_csv('result_db.csv',sep=';') #XXX: Revisar!
         print("NO MORE FILES TO PARSE")
 
         #### BEGIN fitness tests ####
         sample_df=pd.concat(frames[-5:])
-        mining_payoff=(sample_df.loc[sample_df['auction_round']==1])['last_mining_payoff'].dropna()
+        mining_payoff=(sample_df['last_mining_payoff'].loc[sample_df['auction_round']==1]).dropna()
         t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
         if(t_stat>0.46136):
             print("Null hypothesis rejected, PAYOFF sample does not belong to given distribution")
@@ -370,7 +393,7 @@ class Manu(Strategy):
             # plt.plot(p_range,p_dist)
             # plt.show()
             # input("Press enter to continue")
-        base_reward=(sample_df.loc[sample_df['auction_round']==1])['base_reward'].dropna()
+        base_reward=(sample_df['base_reward'].loc[sample_df['auction_round']==1]).dropna()
         t_stat = cvmTest(base_reward,base_reward_dist.distribution().cdf)
         if(t_stat>0.46136):
             print("Null hypothesis rejected, BASE REWARD sample does not belong to given distribution")
@@ -387,7 +410,7 @@ class Manu(Strategy):
             # we need to drop the values where the round does not advance
             #(self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].mean()
             #histograma:
-            m_mean,m_var=lognorm_estimate((self.bd_df.loc[self.bd_df['auction_round']==1])['last_mining_payoff'].dropna().astype(numpy.float32))
+            m_mean,m_var=lognorm_estimate((self.bd_df['last_mining_payoff'].loc[self.bd_df['auction_round']==1]).dropna().astype(numpy.float32))
             print('mining_payoff mean:'+str(m_mean)+' var:'+str(m_var))
             
             # won_tech= self.bd_df['tech'] - self.bd_df['tech'].shift(1)  
@@ -434,7 +457,7 @@ class Manu(Strategy):
         while os.path.exists(path):
             path = outdir+'/'+timestr+'_'+char+'_result.csv'
             char = chr(ord(char) + 1)
-        self.game_df.to_csv(outdir+'/'+timestr+'_result.csv',sep=';')
+        self.game_df.to_csv(path,sep=';')
         print("END  OF THE GAME")
 
 
