@@ -10,6 +10,8 @@ import os
 from time import strftime
 import pathlib
 
+import traceback
+
 class Player(object):
     """Player class for all players. Implements book-keeping, bidding and
         launching (via RPC or local strategy)."""
@@ -27,15 +29,15 @@ class Player(object):
         self.name = name
         self.launching = False
         self.last_bid = 0
-        logpath = str(pathlib.Path.home()) + '/logs/' + self.name
-        pathlib.Path(logpath).mkdir(parents=True, exist_ok=True)
-        self.stats_file = logpath + '/' + strftime("%Y-%m-%d") + '.log'
-        try:
-            os.remove(self.stats_file)
-        except:
-            pass
-        with open(self.stats_file, 'w') as stats_file:
-            stats_file.write('[]\n')
+        # logpath = str(pathlib.Path.home()) + '/logs/' + self.name
+        # pathlib.Path(logpath).mkdir(parents=True, exist_ok=True)
+        # self.stats_file = logpath + '/' + strftime("%Y-%m-%d_%H%M%S") + '.log'
+        # try:
+        #     os.remove(self.stats_file)
+        # except:
+        #     pass
+        # with open(self.stats_file, 'w') as stats_file:
+        #     stats_file.write('[]\n')
         if isinstance(strategy, str):
             try:
                 # this player uses a remote strategy via RPC using this server
@@ -67,18 +69,19 @@ class Player(object):
         self.remove_player()
 
     def write_statistics(self, public_information=None):
-        if self.stats_file:
-            information = {'private': self._get_private_information(),
-               'public': public_information}
-            with open(self.stats_file, mode='r+', encoding='utf-8') as stats_file:
-               stats_file.seek(0, os.SEEK_END)
-               position = stats_file.tell() - 2
-               stats_file.seek(position)
-               if position < 3:
-                   stats_file.write("\n{}]\n".format(json.dumps(information)))
-               else:
-                   stats_file.write(",\n{}]\n".format(json.dumps(information)))
-               #stats_file.close()
+        # if self.stats_file:
+        #     information = {'private': self._get_private_information(),
+        #        'public': public_information}
+        #     with open(self.stats_file, mode='r+', encoding='utf-8') as stats_file:
+        #        stats_file.seek(0, os.SEEK_END)
+        #        position = stats_file.tell() - 2
+        #        stats_file.seek(position)
+        #        if position < 3:
+        #            stats_file.write("\n{}]\n".format(json.dumps(information)))
+        #        else:
+        #            stats_file.write(",\n{}]\n".format(json.dumps(information)))
+        #        #stats_file.close()
+        pass
 
     def begin(self, public_information):
         private_information = self._get_private_information()
@@ -87,7 +90,9 @@ class Player(object):
             self.strategy.begin(private_information, public_information)
         except xmlrpc.client.Fault as err:
             self._rpc_error(err)
-        except:
+        except Exception as e:
+            print(e)
+            traceback.print_tb(e.__traceback__)
             self.remove_player()
 
     def end(self, public_information):
@@ -97,7 +102,9 @@ class Player(object):
             self.strategy.end(private_information, public_information)
         except xmlrpc.client.Fault as err:
             self._rpc_error(err)
-        except:
+        except Exception as e:
+            print(e)
+            traceback.print_tb(e.__traceback__)
             self.remove_player()
 
     def bid(self, public_information):
@@ -110,6 +117,7 @@ class Player(object):
             self._rpc_error(err)
         except Exception as e:
             print(e)
+            traceback.print_tb(e.__traceback__)
             self.remove_player()
 
         try:
@@ -134,6 +142,7 @@ class Player(object):
             self._rpc_error(err)
         except Exception as e:
             print(e)
+            traceback.print_tb(e.__traceback__)
             self.remove_player()
 
         self.launching = bool(launching)
@@ -144,7 +153,9 @@ class Player(object):
             self.strategy.broadcast(message)
         except xmlrpc.client.Fault as err:
             self._rpc_error(err)
-        except:
+        except Exception as e:
+            print(e)
+            traceback.print_tb(e.__traceback__)
             self.remove_player()
 
     def next_round(self):
@@ -154,7 +165,8 @@ class Player(object):
         self.write_statistics()
         try:
             self.strategy.ping()
-        except:
+        except Exception as e:
+            print(e)
             self.remove_player()
 
     def buy_tech(self, tech, price):
