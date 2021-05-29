@@ -375,36 +375,36 @@ class Manu(Strategy):
                 print('Error al leer archivo ',filename)
                 print(e)
 
+        print("NO MORE FILES TO PARSE")
         if (len(frames)>0):
             self.bd_df = pd.concat(frames)
-        # self.bd_df.to_csv('result_db.csv',sep=';') #XXX: Revisar!
-        print("NO MORE FILES TO PARSE")
+            # self.bd_df.to_csv('result_db.csv',sep=';') #XXX: Revisar! Lo necesitamos?
 
-        #### BEGIN fitness tests ####
-        sample_df=pd.concat(frames[-5:])
-        mining_payoff=(sample_df['last_mining_payoff'].loc[sample_df['auction_round']==1]).dropna()
-        t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
-        if(t_stat>0.46136):
-            print("Null hypothesis rejected, PAYOFF sample does not belong to given distribution")
-            payoff_bins=numpy.arange(-1,mining_payoff.max())+0.5
-            mining_payoff.hist(bins=payoff_bins,density=True) 
-            p_range=numpy.linspace(-1,int(mining_payoff.max()),int(mining_payoff.max()*2))
-            p_dist=payoff_dist.distribution().pdf(p_range)
-            # plt.plot(p_range,p_dist)
-            # plt.show()
-            # input("Press enter to continue")
-        base_reward=(sample_df['base_reward'].loc[sample_df['auction_round']==1]).dropna()
-        t_stat = cvmTest(base_reward,base_reward_dist.distribution().cdf)
-        if(t_stat>0.46136):
-            print("Null hypothesis rejected, BASE REWARD sample does not belong to given distribution")
-            br_bins=numpy.arange(-1,base_reward.max())+0.5
-            base_reward.hist(bins=br_bins,density=True) 
-            p_range=numpy.linspace(-1,int(base_reward.max()),int(base_reward.max()*2))
-            p_dist=base_reward_dist.distribution().pdf(p_range)
-            # plt.plot(p_range,p_dist)
-            # plt.show()
-            # input("Press enter to continue")
-        #### END fitness tests ####
+            #### BEGIN fitness tests ####
+            sample_df=pd.concat(frames[-5:])
+            mining_payoff=(sample_df['last_mining_payoff'].loc[sample_df['auction_round']==1]).dropna()
+            t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
+            if(t_stat>0.46136):
+                print("Null hypothesis rejected, PAYOFF sample does not belong to given distribution")
+                payoff_bins=numpy.arange(-1,mining_payoff.max())+0.5
+                mining_payoff.hist(bins=payoff_bins,density=True) 
+                p_range=numpy.linspace(-1,int(mining_payoff.max()),int(mining_payoff.max()*2))
+                p_dist=payoff_dist.distribution().pdf(p_range)
+                # plt.plot(p_range,p_dist)
+                # plt.show()
+                # input("Press enter to continue")
+            base_reward=(sample_df['base_reward'].loc[sample_df['auction_round']==1]).dropna()
+            t_stat = cvmTest(base_reward,base_reward_dist.distribution().cdf)
+            if(t_stat>0.46136):
+                print("Null hypothesis rejected, BASE REWARD sample does not belong to given distribution")
+                br_bins=numpy.arange(-1,base_reward.max())+0.5
+                base_reward.hist(bins=br_bins,density=True) 
+                p_range=numpy.linspace(-1,int(base_reward.max()),int(base_reward.max()*2))
+                p_dist=base_reward_dist.distribution().pdf(p_range)
+                # plt.plot(p_range,p_dist)
+                # plt.show()
+                # input("Press enter to continue")
+            #### END fitness tests ####
 
         if self.bd_df.size > 0 :
             # we need to drop the values where the round does not advance
