@@ -29,6 +29,14 @@
             "program": "${workspaceFolder}/multirun.py",
             "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"60",
                    "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"10"}
+        }        ,
+        {
+            "name": "Obj Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/obj_tests.py",
+            "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"600",
+                   "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"100"}
         }
     ]
 }
