@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.optimize import minimize
 
 def multiprocess():
-    games=100
+    games=500
     concurent_process=8
     p = [None]*concurent_process
     files = [None]*concurent_process
@@ -18,10 +18,11 @@ def multiprocess():
             #     print(out)
             # except Exception as e:
             #     print("EXCEPTION: "+e)
-            files[i]=open('log'+str(i),'w')
+            # files[i]=open('log'+str(i),'w')
             try:
-                p[i]=subprocess.Popen(["python","smp.py"],stdout=files[i],stderr=files[i])
-                time.sleep(0.05)
+                # p[i]=subprocess.Popen(["python","smp.py"],stdout=files[i],stderr=files[i])
+                p[i]=subprocess.Popen(["python","smp.py"],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+                time.sleep(0.01)
             except Exception as e:
                 print("EXCEPTION: "+e)
             # else:
@@ -85,7 +86,7 @@ def runcampaign(params,multiprocess_run=True):
             if(name.endswith('.csv')):
                 try:
                     path = root+'/'+name
-                    print(path)
+                    # print(path)
                     file_df = pd.read_csv(path,sep=';',index_col=0)                    
                     # file_df.columns = file_df.columns.str.replace(" ", "")
                     frames.append(file_df) #array de dataframes
@@ -93,27 +94,47 @@ def runcampaign(params,multiprocess_run=True):
                     print('Error al leer archivo ',path)
             else:
                 print("UNKNOWN FILE EXTENSION:"+root+'/'+name)
-    obj = 0
+    # obj = 0
+    won_games=0
     games_in_campaign=0
+    list=[]
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
         for frame in frames:
             aux = frame.loc[frame['Manu']<0,'round']
-            z = 0
             if aux.size!=0:
-                z=201-aux.iloc[0] # positivo, mayor cuanto antes nos hayan eliminado
+                rounds_till_end=201-aux.iloc[0] # positivo, mayor cuanto antes nos hayan eliminado
             else:
-                z=(frame.loc[frame.index[-1],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-1].item())/200 #0 si soy yo // positivo estoy por detrás (maximizo la distancia con el segundo)
-                if math.isnan(z):
-                    z=(frame.loc[frame.index[-2],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-2].item())/200 #workaround para evitar NaN
-            if not math.isnan(z):
-                obj+=z
-                games_in_campaign+=1
-        print(obj/games_in_campaign)
-        df.iloc[-1,-1]=obj/games_in_campaign
-        df.to_csv(filepath,sep=';')
+                rounds_till_end=0
+            
+            money_diff=(frame.loc[frame.index[-1],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-1].item())/200 #0 si soy yo // positivo estoy por detrás (maximizo la distancia con el segundo)
+            if math.isnan(money_diff):
+                money_diff=(frame.loc[frame.index[-2],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-2].item())/200 #workaround para evitar NaN
 
-    return obj/games_in_campaign
+
+            if not (math.isnan(rounds_till_end) or math.isnan(money_diff)):
+                games_in_campaign+=1
+                won_games+= int(rounds_till_end==0 and money_diff==0)
+                # obj=won_games/games_in_campaign
+
+            # z = 0
+            # if aux.size!=0:
+            #     z=201-aux.iloc[0] # positivo, mayor cuanto antes nos hayan eliminado
+            # else:
+            #     z=(frame.loc[frame.index[-1],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-1].item())/200 #0 si soy yo // positivo estoy por detrás (maximizo la distancia con el segundo)
+            #     if math.isnan(z):
+            #         z=(frame.loc[frame.index[-2],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-2].item())/200 #workaround para evitar NaN
+            # if not math.isnan(z):
+            #     obj+=z
+            #     games_in_campaign+=1
+            list.append(1-(won_games/games_in_campaign))
+        stats=pd.Series(list[25:])
+        cma25=stats.expanding(min_periods=25).mean()
+        # print('sma:'+str(sma25.iloc[-1]))
+        print(won_games/games_in_campaign)
+        df.iloc[-1,-1]=cma25.iloc[-1]
+        df.to_csv(filepath,sep=';')
+    return cma25.iloc[-1]
 
 
 def main():
