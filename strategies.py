@@ -215,9 +215,8 @@ class Manu(Strategy):
         player_tech_expected=copy.deepcopy(self.players_tech_count)
         player_tech_expected.update((k,v*self.TECH_EXPECTATION) for k,v in player_tech_expected.items()) 
 
-        launchdecision_threshold=0.6
         basereward_mod=numpy.sqrt((public_information['base_reward']/self.br_expect)+0.125)
-        launch = (private_information['tech']/sum(player_tech_expected.values()))*basereward_mod > launchdecision_threshold #+failure_chance #and expected reward is greater than tech invested?
+        launch = (private_information['tech']/sum(player_tech_expected.values()))*basereward_mod > self.launchdecision_threshold #+failure_chance #and expected reward is greater than tech invested?
         if launch:
             self.tech_cost=0
             print('ELIJO LANZAR')
@@ -235,9 +234,8 @@ class Manu(Strategy):
                     shared_wins+=value
         total_bids=sum(counts)
 
-        raisebid_factor = 0.6
         #lógica de bid_amount:
-        if((won_bids-shared_wins)/total_bids > (raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
+        if((won_bids-shared_wins)/total_bids > (self.raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
             bid_amount= min(math.ceil(self.prev_bid/2)+1,self.prev_bid-1)
         elif('Manu' not in public_information['last_winning_bidders']):
             bid_amount=self.prev_bid+3
@@ -248,8 +246,8 @@ class Manu(Strategy):
 
         bid_amount=max(0,bid_amount)
 
-        risk_factor=0.5 #should be close to 1
-        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*(risk_factor+0.5)):
+        
+        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*(self.risk_factor+0.5)):
             bid_amount=1
 
         # for sublist in counts.index.values:
@@ -292,9 +290,9 @@ class Manu(Strategy):
         player_tech_expected.update((k,v*5) for k,v in player_tech_expected.items()) 
         
         #joining_launch = (private_information['tech']/sum(player_tech_expected.values()))*(public_information['base_reward']/br_expect) > 0.4 #+failure_chance #and expected reward is greater than tech invested?
-        joindecision_threshold=0.3
+        
         basereward_mod=numpy.sqrt((public_information['base_reward']/self.br_expect)+0.125)
-        joining_launch = (private_information['tech']/sum(player_tech_expected.values()))*basereward_mod > joindecision_threshold
+        joining_launch = (private_information['tech']/sum(player_tech_expected.values()))*basereward_mod > self.joindecision_threshold
         if joining_launch:
             self.tech_cost=0
             print('ELIJO UNIRME')
@@ -316,10 +314,10 @@ class Manu(Strategy):
         if os.path.exists(filepath):
             campaign_data = pd.read_csv(filepath,sep=';',index_col=0).iloc[-1]
             self.campaign_folder='/campaign_'+campaign_data['date']
-            self.joindecision_threshold=campaign_data['joindecision_threshold']
-            self.launchdecision_threshold=campaign_data['launchdecision_threshold']
+            self.joindecision_threshold = campaign_data['joindecision_threshold']
+            self.launchdecision_threshold = campaign_data['launchdecision_threshold']
             self.raisebid_factor = campaign_data['raisebid_factor']
-            self.risk_factor=campaign_data['risk_factor']
+            self.risk_factor = campaign_data['risk_factor']
 
         #### BEGIN Read persistent data from offline analysis ####
         filepath="./analysis/_results.csv"
