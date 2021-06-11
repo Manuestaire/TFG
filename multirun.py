@@ -128,13 +128,13 @@ def runcampaign(params,multiprocess_run=True):
             #     obj+=z
             #     games_in_campaign+=1
             list.append(1-(won_games/games_in_campaign))
-        stats=pd.Series(list[25:])
-        cma25=stats.expanding(min_periods=25).mean()
+        stats=pd.Series(list[150:])
+        cma150=stats.expanding(min_periods=25).mean()
         # print('sma:'+str(sma25.iloc[-1]))
         print(won_games/games_in_campaign)
-        df.iloc[-1,-1]=cma25.iloc[-1]
+        df.iloc[-1,-1]=cma150.iloc[-1]
         df.to_csv(filepath,sep=';')
-    return cma25.iloc[-1]
+    return cma150.iloc[-1]
 
 
 def main():

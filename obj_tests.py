@@ -187,15 +187,30 @@ def generate_stats(outdir):
         sma=stats.loc[:,'win_percent'].rolling(window=10).mean()
         sma25=stats.loc[:,'win_percent'].rolling(window=25).mean()
         sma50=stats.loc[:,'win_percent'].rolling(window=50).mean()
+        sma100=stats.loc[:,'win_percent'].rolling(window=100).mean()
         plt.plot(stats['num_games'],sma)
         plt.plot(stats['num_games'],sma25)
         plt.plot(stats['num_games'],sma50)
+        plt.plot(stats['num_games'],sma100)
         df=stats.loc[:,'win_percent']
         cma=df.expanding(min_periods=10).mean()
         plt.plot(stats['num_games'],cma)
         ema=df.ewm(span=25,adjust=False).mean()
         plt.plot(stats['num_games'],ema)
-        plt.legend(['sample','SMA 10','SMA 25','SMA 50','CMA','EMA 25'])
+        plt.legend(['sample','SMA 10','SMA 25','SMA 50','SMA 100','CMA','EMA 25'])
+        plt.figure()
+        plt.plot(stats['num_games'],stats['win_percent'],'o--')
+        cma=df.expanding(min_periods=25).mean()
+        cma25=(df.iloc[25:]).expanding(min_periods=25).mean()
+        cma50=(df.iloc[50:]).expanding(min_periods=25).mean()
+        cma100=(df.iloc[100:]).expanding(min_periods=25).mean()
+        cma150=(df.iloc[150:]).expanding(min_periods=25).mean()
+        plt.plot(stats['num_games'],cma)
+        plt.plot(range(25,25+len(cma25)),cma25)
+        plt.plot(range(50,50+len(cma50)),cma50)
+        plt.plot(range(100,100+len(cma100)),cma100)
+        plt.plot(range(150,150+len(cma150)),cma150)
+        plt.legend(['sample','CMA','CMA 25*','CMA 50*','CMA 100*','CMA 150*'])
         plt.show()
 
 
@@ -207,8 +222,10 @@ def main():
         signal.signal(signal.SIGTERM, prepare_exit)
         
         generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210605_024635")
-        
+        # generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210605_030229")
         # runcampaign([0.5,0.5,0.5,0.5])
+    except Exception as e:
+        print(e)
     finally:
         prepare_exit()
         
