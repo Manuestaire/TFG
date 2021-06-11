@@ -98,6 +98,7 @@ def runcampaign(params,multiprocess_run=True):
     won_games=0
     games_in_campaign=0
     list=[]
+    cma150=1
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
         for frame in frames:
