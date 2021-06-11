@@ -16,7 +16,7 @@ def multiprocess():
     p = [None]*concurent_process
     files = [None]*concurent_process
     for j in range(int(round(games/concurent_process,0))):
-        print("batch:"+str(j))
+        # print("batch:"+str(j))
         for i in range(concurent_process):
             # try:
             #     out = subprocess.run("python smp.py", check=True, shell=True)
@@ -33,10 +33,10 @@ def multiprocess():
             # else:
             #     print("Finished RUN")
         status = [None]*concurent_process
-        while None in status:
-            for i in range(concurent_process):
-                # print('process '+str(i)+': '+str(status[i]))
-                status[i]=p[i].poll()
+        # while None in status:
+        #     for i in range(concurent_process):
+        #         # print('process '+str(i)+': '+str(status[i]))
+        #         status[i]=p[i].poll()
             # time.sleep(5)
         for process in p:
             process.wait()

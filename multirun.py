@@ -12,6 +12,7 @@ def multiprocess():
     p = [None]*concurent_process
     files = [None]*concurent_process
     for j in range(int(round(games/concurent_process,0))):
+        # print("batch:"+str(j))
         for i in range(concurent_process):
             # try:
             #     out = subprocess.run("python smp.py", check=True, shell=True)
@@ -28,11 +29,11 @@ def multiprocess():
             # else:
             #     print("Finished RUN")
         status = [None]*concurent_process
-        while None in status:
-            for i in range(concurent_process):
-                # print('process '+str(i)+': '+str(status[i]))
-                status[i]=p[i].poll()
-            # time.sleep(5)
+        # while None in status:
+        #     for i in range(concurent_process):
+        #         print('process '+str(i)+': '+str(status[i]))
+        #         status[i]=p[i].poll()
+        #     time.sleep(5)
         for process in p:
             process.wait()
 
@@ -98,7 +99,7 @@ def runcampaign(params,multiprocess_run=True):
     won_games=0
     games_in_campaign=0
     list=[]
-    cma150=1
+    cma150=pd.Series([math.nan])
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
         for frame in frames:
