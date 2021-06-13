@@ -67,9 +67,9 @@ class Manu(Strategy):
     TECH_EXPECTATION = 5
 
     campaign_folder = ''
-    joindecision_threshold=0.3
-    launchdecision_threshold=0.6
-    raisebid_factor = 0.6
+    joindecision_threshold=0.5
+    launchdecision_threshold=0.5
+    raisebid_factor = 0.5
     risk_factor=0.5
 
     def addRow(self, private_information, public_information):
@@ -82,7 +82,7 @@ class Manu(Strategy):
             row=pd.DataFrame.from_dict(public_info,orient='index').T.infer_objects()
             row_df= pd.concat([row,df_players],axis=1)
 
-
+    
             row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
             #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
 
@@ -379,7 +379,7 @@ class Manu(Strategy):
             # self.bd_df.to_csv('result_db.csv',sep=';') #XXX: Revisar! Lo necesitamos?
 
             #### BEGIN fitness tests ####
-            sample_df=pd.concat(frames[-5:])
+            sample_df=self.bd_df
             mining_payoff=(sample_df['last_mining_payoff'].loc[sample_df['auction_round']==1]).dropna()
             t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
             if(t_stat>0.46136):
@@ -455,7 +455,9 @@ class Manu(Strategy):
         while os.path.exists(path):
             path = outdir+'/'+timestr+'_'+char+'_result.csv'
             char = chr(ord(char) + 1)
-        self.game_df.to_csv(path,sep=';')
+        with open(path,"x",newline='') as file:
+            print("saving to: "+path)
+            self.game_df.to_csv(file,sep=';')
         print("END  OF THE GAME")
 
 
