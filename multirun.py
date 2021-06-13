@@ -5,6 +5,7 @@ import signal
 import math
 import pandas as pd
 from scipy.optimize import minimize
+from multiprocessing.pool import ThreadPool
 
 def multiprocess():
     games=500
@@ -14,11 +15,6 @@ def multiprocess():
     for j in range(int(round(games/concurent_process,0))):
         # print("batch:"+str(j))
         for i in range(concurent_process):
-            # try:
-            #     out = subprocess.run("python smp.py", check=True, shell=True)
-            #     print(out)
-            # except Exception as e:
-            #     print("EXCEPTION: "+e)
             # files[i]=open('log'+str(i),'w')
             try:
                 # p[i]=subprocess.Popen(["python","smp.py"],stdout=files[i],stderr=files[i])
@@ -36,6 +32,20 @@ def multiprocess():
         #     time.sleep(5)
         for process in p:
             process.wait()
+
+def multiprocess2():
+    games=300
+
+    tp=ThreadPool()
+    for j in range(games):
+        tp.apply_async(openSubprocess)
+    tp.close()
+    tp.join()
+        
+
+def openSubprocess():
+    process=subprocess.Popen(["python","smp.py"],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    process.wait()
 
 def singleprocess():
     for i in range(50):
@@ -58,8 +68,8 @@ def runcampaign(params,multiprocess_run=True):
     while os.path.exists(outdir):
         outdir = basedir+timestr+'_'+char
         char = chr(ord(char) + 1)
-    os.mkdir(outdir)
-    
+    os.makedirs(outdir)
+
     ## Vuelco parámetros a csv
     filepath='campaigndata.csv'
 
@@ -69,14 +79,14 @@ def runcampaign(params,multiprocess_run=True):
     if os.path.exists(filepath):
         print('Saving to existing file')
         df = pd.read_csv(filepath,sep=';',index_col=0)
-        df = df.append(row.to_frame().T,ignore_index=True) 
+        df = df.append(row.to_frame().T,ignore_index=True)
     else:
         df = row.to_frame().T
     df.to_csv(filepath,sep=';')
 
     ## luego corro la campaña
     if multiprocess_run:
-        multiprocess()
+        multiprocess2()
     else:
         singleprocess()
 
@@ -88,7 +98,7 @@ def runcampaign(params,multiprocess_run=True):
                 try:
                     path = root+'/'+name
                     # print(path)
-                    file_df = pd.read_csv(path,sep=';',index_col=0)                    
+                    file_df = pd.read_csv(path,sep=';',index_col=0)
                     # file_df.columns = file_df.columns.str.replace(" ", "")
                     frames.append(file_df) #array de dataframes
                 except Exception:
@@ -99,7 +109,7 @@ def runcampaign(params,multiprocess_run=True):
     won_games=0
     games_in_campaign=0
     list=[]
-    cma150=pd.Series([math.nan])
+    cma150=pd.Series([math.nan],dtype='float64')
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
         for frame in frames:
@@ -108,7 +118,7 @@ def runcampaign(params,multiprocess_run=True):
                 rounds_till_end=201-aux.iloc[0] # positivo, mayor cuanto antes nos hayan eliminado
             else:
                 rounds_till_end=0
-            
+
             money_diff=(frame.loc[frame.index[-1],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-1].item())/200 #0 si soy yo // positivo estoy por detrás (maximizo la distancia con el segundo)
             if math.isnan(money_diff):
                 money_diff=(frame.loc[frame.index[-2],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-2].item())/200 #workaround para evitar NaN
@@ -133,7 +143,7 @@ def runcampaign(params,multiprocess_run=True):
         stats=pd.Series(list[150:])
         cma150=stats.expanding(min_periods=25).mean()
         # print('sma:'+str(sma25.iloc[-1]))
-        print(won_games/games_in_campaign)
+        print("win:"+str(won_games/games_in_campaign)+"% in "+str(games_in_campaign)+" games")
         df.iloc[-1,-1]=cma150.iloc[-1]
         df.to_csv(filepath,sep=';')
     return cma150.iloc[-1]
@@ -150,9 +160,11 @@ def main():
         boundaries=((0,1),(0,1),(0,1),(0,1))
         res=minimize(runcampaign,x0=[initial_guess],bounds=boundaries,options={"maxiter":4})
         print(res)
+    except Exception as e:
+        print(e)
     finally:
         prepare_exit()
-        
+
 
 
 def prepare_exit():
@@ -161,12 +173,3 @@ def prepare_exit():
 
 if __name__ == "__main__":
     main()
-
-
-
-        
-
-
-                
-            
-
