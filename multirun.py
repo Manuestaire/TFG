@@ -167,7 +167,7 @@ def main():
 
 
 
-def prepare_exit():
+def prepare_exit(signum=None,frame=None):
     if os.path.exists('campaigndata.csv'):
             os.rename('campaigndata.csv','campaigndata_'+time.strftime("%Y%m%d_%H%M%S")+'.csv')
 
