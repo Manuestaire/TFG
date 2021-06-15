@@ -34,7 +34,7 @@ def multiprocess():
             process.wait()
 
 def multiprocess2():
-    games=300
+    games=500
 
     tp=ThreadPool()
     for j in range(games):
@@ -73,8 +73,8 @@ def runcampaign(params,multiprocess_run=True):
     ## Vuelco parámetros a csv
     filepath='campaigndata.csv'
 
-    data=[timestr, params[0], params[1], params[2], params[3],0]
-    row=pd.Series(data,index=['date','joindecision_threshold','launchdecision_threshold','raisebid_factor','risk_factor','objective'])
+    data=[timestr, params[0], params[1], params[2], params[3],0,0]
+    row=pd.Series(data,index=['date','joindecision_threshold','launchdecision_threshold','raisebid_factor','risk_factor','sma','cma (obj)'])
     df = None
     if os.path.exists(filepath):
         print('Saving to existing file')
@@ -140,13 +140,15 @@ def runcampaign(params,multiprocess_run=True):
             #     obj+=z
             #     games_in_campaign+=1
             list.append(1-(won_games/games_in_campaign))
-        stats=pd.Series(list[150:])
-        cma150=stats.expanding(min_periods=25).mean()
-        # print('sma:'+str(sma25.iloc[-1]))
+        stats=pd.Series(list[200:], dtype='float64')
+        cma200=stats.expanding(min_periods=25).mean()
+        sma200=stats.rolling(window=200).mean()
+        print('sma:'+str(sma200.iloc[-1])+' cma:'+str(cma200.iloc[-1]))
         print("win:"+str(won_games/games_in_campaign)+"% in "+str(games_in_campaign)+" games")
-        df.iloc[-1,-1]=cma150.iloc[-1]
+        df.iloc[-1,-1]=cma200.iloc[-1]
+        df.iloc[-1,-2]=sma200.iloc[-1]
         df.to_csv(filepath,sep=';')
-    return cma150.iloc[-1]
+    return cma200.iloc[-1]
 
 
 def main():
