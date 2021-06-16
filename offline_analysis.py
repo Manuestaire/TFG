@@ -58,7 +58,7 @@ class paramData:
             os.mkdir(outdir)
         filepath=outdir+'/'+tag+'_results.csv'
         if os.path.exists(filepath):
-            print('Saving to existing file')
+            print('Saving to: '+filepath)
             df = pd.read_csv(filepath,sep=';',index_col=0)
             df = df.append(self.to_series().to_frame().T,ignore_index=True)
         else:
@@ -73,27 +73,35 @@ class offlineAnalysis:
     complete_sample = pd.DataFrame()
 
     def __init__(self):
-        frames=[]
+        filename_list=[]
         for root, dirs, filenames in os.walk('./data'):
             for name in filenames:
                 if(name.endswith('.csv')):
                     path = root+'/'+name
-                    print(path)
-                    file_df = pd.read_csv(path,sep=';',index_col=0)                    
-                    file_df.columns = file_df.columns.str.replace(" ", "")
-                    frames.append(file_df) #array de dataframes
+                    filename_list.append(path)
                 else:
-                    print("UNKNOWN FILE EXTENSION:"+root+'/'+name)
+                    print("UNKNOWN FILE EXT:"+root+'/'+name)
+        frames=[]
+        for filename in filename_list[-2000:]:
+            try:
+                # print(filename)
+                file_df = pd.read_csv(filename,sep=';',index_col=0)                    
+                file_df.columns = file_df.columns.str.replace(" ", "")
+                frames.append(file_df)
+            except Exception as e:
+                print('Error al leer archivo ',filename)
+                print(e)
+
         if (len(frames)>0):
-            self.complete_sample = pd.concat(frames)
-            self.old_sample= pd.concat(frames[:2]) 
-            self.new_sample= pd.concat(frames[-2:])
+            self.complete_sample = pd.concat(frames[-2000:])
+            self.old_sample= pd.concat(frames[:100]) 
+            self.new_sample= pd.concat(frames[-100:])
 
         self.complete_sample.to_csv('result_db.csv',sep=';')
         print("NO MORE FILES TO PARSE")
 
 
-def analyze(sample_df : pd.DataFrame, show_figures=True):
+def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array([]), new_sample=numpy.array([])):
         print("OFFLINE ANALYSYS RUNNING!!")
         
         if sample_df.size > 0 :
@@ -126,8 +134,9 @@ def analyze(sample_df : pd.DataFrame, show_figures=True):
             base_reward_data=lognormData(r_mean2,rshape,rloc)
             br_expect=r_dist.expect()
 
-
-            #ttest_result=TTest(self.old_sample['tech_gain_passive'].dropna(),self.new_sample['tech_gain_passive'].dropna()) #TODO!
+            ttest_result=[numpy.NaN,numpy.NaN,numpy.NaN]
+            if(old_sample.size>0 and new_sample.size>0):
+                ttest_result=TTest(old_sample['tech_gain_passive'].dropna(),new_sample['tech_gain_passive'].dropna()) #TODO!
             ###### END base_reward ######
 
             ###### BEGIN mining_payoff ######
@@ -176,7 +185,7 @@ def analyze(sample_df : pd.DataFrame, show_figures=True):
             # PLOT cdf real y estimado
             plt.figure()
             base_reward_test=(sample_df.loc[sample_df['auction_round']==1])['base_reward'].dropna()
-            t_ret2 = stats.cramervonmises(base_reward_test,payoff_distribution.cdf)
+            # t_ret2 = stats.cramervonmises(base_reward_test,payoff_distribution.cdf)
             plt.plot(x_axis,payoff_cdf)
             plt.plot(x_axis,payoff_theor_cdf)
             plt.legend(['payoff cdf','parametric-estimated payoff cdf'])
@@ -200,8 +209,9 @@ def analyze(sample_df : pd.DataFrame, show_figures=True):
             failure_rounds=a.loc[a['last_winning_miner']=='Mission failure']['round']
             failure_rounds_arr=numpy.sort(failure_rounds)
             val,count = numpy.unique(failure_rounds_arr,return_counts=True)
+            num_rounds=a['round'].value_counts().reindex(val)
             plt.figure()
-            plt.bar(val,count)
+            plt.bar(val,count/num_rounds.values)
             plt.show(block=False)
             ###### END Failure chance ######
 
@@ -231,7 +241,7 @@ def analyze(sample_df : pd.DataFrame, show_figures=True):
 
 
 
-            return_data = paramData(getUniformParams(won_tech_passive),getUniformParams(won_tech_bid),base_reward_data,payoff_data,[0,0,0]) # ttest_result
+            return_data = paramData(getUniformParams(won_tech_passive),getUniformParams(won_tech_bid),base_reward_data,payoff_data,ttest_result) # ttest_result
             return_data.to_file()
 
             #new_df = pd.concat([won_tech,corrected_won_tech],axis=1) #debugging
@@ -252,8 +262,8 @@ def analyze(sample_df : pd.DataFrame, show_figures=True):
 
 def main():
     analysis = offlineAnalysis()
-    analyze(analysis.complete_sample)
-    TTest(analysis.old_sample['tech_gain_passive'].dropna(),analysis.new_sample['tech_gain_passive'].dropna())
+    analyze(analysis.complete_sample,True,analysis.old_sample,analysis.new_sample)
+    # TTest(['tech_gain_passive'].dropna(),analysis.new_sample['tech_gain_passive'].dropna())
 
 if __name__ == "__main__":
     main()

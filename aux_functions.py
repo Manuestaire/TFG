@@ -38,10 +38,10 @@ def TTest(a : pd.Series,b : pd.Series,alpha=0.05): #95% confidence (two tailed)
     print("t = " + str(t))
     print("p = " + str(p))
     # interpret via critical value
-    if abs(t) <= cv:
-        print('Accept null hypothesis. (critical value)')
-    else:
-        print('Reject the null hypothesis. (critical value)')
+    # if abs(t) <= cv:
+    #     print('Accept null hypothesis. (critical value)')
+    # else:
+    #     print('Reject the null hypothesis. (critical value)')
     # interpret via p-value
     if p > alpha:
         print('Accept null hypothesis. (p-value)')
