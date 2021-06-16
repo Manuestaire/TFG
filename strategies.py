@@ -22,6 +22,7 @@ import copy
 
 from aux_functions import *
 from offline_analysis import lognormData
+from random import random
 
 
 class Strategy(object):
@@ -74,14 +75,16 @@ class Manu(Strategy):
     def addRow(self, private_information, public_information):
         try:
             tech_gain = private_information['tech']-self.prev_tech if not self.launched else private_information['tech']
-            df_players = pd.DataFrame(public_information['players']).reset_index(drop=True)
+            
+            players_dict={}
+            for key,value in public_information['players'].items():
+                players_dict[key]=value['bankroll']
             public_info = copy.deepcopy(public_information)
             del public_info['players']
+            extend_dict={'tech':numpy.NaN,'tech_gain_passive':numpy.NaN,'tech_at_join':numpy.NaN,'tech_gain_bid':numpy.NaN}
 
-            row=pd.DataFrame.from_dict(public_info,orient='index').T.infer_objects()
-            row_df= pd.concat([row,df_players],axis=1)
-            #TODO: try this: https://stackoverflow.com/questions/38987/how-do-i-merge-two-dictionaries-in-a-single-expression-taking-union-of-dictiona
-
+            row_dict={**public_info,**players_dict,**extend_dict}
+            row_df=pd.DataFrame.from_dict(row_dict,orient='index').T.infer_objects()
     
             row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
             #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
@@ -332,52 +335,53 @@ class Manu(Strategy):
         #### END Read persistent data ####
 
         #### READ PREVIOUS GAMES:
-        filename_list=[]
-        for root, dirs, filenames in os.walk('./data'):
-            for name in filenames:
-                if(name.endswith('.csv')):
-                    path = root+'/'+name
-                    filename_list.append(path)
-                else:
-                    print("UNKNOWN FILE EXT:"+root+'/'+name)
-        frames=[]
-        for filename in filename_list[-25:]:
-            try:
-                print(filename)
-                file_df = pd.read_csv(filename,sep=';',index_col=0)                    
-                file_df.columns = file_df.columns.str.replace(" ", "")
-                frames.append(file_df)
-            except Exception as e:
-                print('Error al leer archivo ',filename)
-                print(e)
-        print("NO MORE FILES TO PARSE")
+        if(random()<0.15): #due to performance reasons we only run fitness tests on 15% games
+            filename_list=[]
+            for root, dirs, filenames in os.walk('./data'):
+                for name in filenames:
+                    if(name.endswith('.csv')):
+                        path = root+'/'+name
+                        filename_list.append(path)
+                    else:
+                        print("UNKNOWN FILE EXT:"+root+'/'+name)
+            frames=[]
+            for filename in filename_list[-250:]:
+                try:
+                    print(filename)
+                    file_df = pd.read_csv(filename,sep=';',index_col=0)                    
+                    file_df.columns = file_df.columns.str.replace(" ", "")
+                    frames.append(file_df)
+                except Exception as e:
+                    print('Error al leer archivo ',filename)
+                    print(e)
+            print("NO MORE FILES TO PARSE")
 
-        if (len(frames)>0):
-            #### BEGIN fitness tests ####
-            sample_df=pd.concat(frames)
-            mining_payoff=(sample_df['last_mining_payoff'].loc[sample_df['auction_round']==1]).dropna()
-            t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
-            if(t_stat>0.46136):
-                print("Null hypothesis rejected, PAYOFF sample does not belong to given distribution")
-                payoff_bins=numpy.arange(-1,mining_payoff.max())+0.5
-                mining_payoff.hist(bins=payoff_bins,density=True) 
-                p_range=numpy.linspace(-1,int(mining_payoff.max()),int(mining_payoff.max()*2))
-                p_dist=payoff_dist.distribution().pdf(p_range)
-                # plt.plot(p_range,p_dist)
-                # plt.show()
-                # input("Press enter to continue")
-            base_reward=(sample_df['base_reward'].loc[sample_df['auction_round']==1]).dropna()
-            t_stat = cvmTest(base_reward,base_reward_dist.distribution().cdf)
-            if(t_stat>0.46136):
-                print("Null hypothesis rejected, BASE REWARD sample does not belong to given distribution")
-                br_bins=numpy.arange(-1,base_reward.max())+0.5
-                base_reward.hist(bins=br_bins,density=True) 
-                p_range=numpy.linspace(-1,int(base_reward.max()),int(base_reward.max()*2))
-                p_dist=base_reward_dist.distribution().pdf(p_range)
-                # plt.plot(p_range,p_dist)
-                # plt.show()
-                # input("Press enter to continue")
-            #### END fitness tests ####
+            if (len(frames)>0):
+                #### BEGIN fitness tests ####
+                sample_df=pd.concat(frames)
+                mining_payoff=(sample_df['last_mining_payoff'].loc[sample_df['auction_round']==1]).dropna()
+                t_stat = cvmTest(mining_payoff,payoff_dist.distribution().cdf)
+                if(t_stat>0.46136):
+                    print("Null hypothesis rejected, PAYOFF sample does not belong to given distribution")
+                    payoff_bins=numpy.arange(-1,mining_payoff.max())+0.5
+                    mining_payoff.hist(bins=payoff_bins,density=True) 
+                    p_range=numpy.linspace(-1,int(mining_payoff.max()),int(mining_payoff.max()*2))
+                    p_dist=payoff_dist.distribution().pdf(p_range)
+                    # plt.plot(p_range,p_dist)
+                    # plt.show()
+                    # input("Press enter to continue")
+                base_reward=(sample_df['base_reward'].loc[sample_df['auction_round']==1]).dropna()
+                t_stat = cvmTest(base_reward,base_reward_dist.distribution().cdf)
+                if(t_stat>0.46136):
+                    print("Null hypothesis rejected, BASE REWARD sample does not belong to given distribution")
+                    br_bins=numpy.arange(-1,base_reward.max())+0.5
+                    base_reward.hist(bins=br_bins,density=True) 
+                    p_range=numpy.linspace(-1,int(base_reward.max()),int(base_reward.max()*2))
+                    p_dist=base_reward_dist.distribution().pdf(p_range)
+                    # plt.plot(p_range,p_dist)
+                    # plt.show()
+                    # input("Press enter to continue")
+                #### END fitness tests ####
 
     def end(self, private_information, public_information):
         self.addRow(private_information, public_information)
