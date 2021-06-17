@@ -154,13 +154,17 @@ def runcampaign(params,multiprocess_run=True):
 def main():
     try:
         print("Hello World!")
+        if os.path.exists('campaigndata.csv'):
+            print("Renamed old campaign data")
+            os.rename('campaigndata.csv','campaigndata_'+time.strftime("%Y%m%d_%H%M%S")+'.csv')
+
         #### SIGNAL HANDLERS ####
         signal.signal(signal.SIGINT, prepare_exit)
         signal.signal(signal.SIGTERM, prepare_exit)
 
         initial_guess=[0.5,0.5,0.5,0.5]
         boundaries=((0,1),(0,1),(0,1),(0,1))
-        res=minimize(runcampaign,x0=[initial_guess],bounds=boundaries,options={"maxiter":4})
+        res=minimize(runcampaign,method='Powell',x0=[initial_guess],bounds=boundaries,options={"maxiter":400,"xtol":0.05,"ftol":0.05})
         print(res)
     except Exception as e:
         print(e)
