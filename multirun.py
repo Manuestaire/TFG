@@ -36,7 +36,7 @@ def multiprocess():
 def multiprocess2():
     games=500
 
-    tp=ThreadPool()
+    tp=ThreadPool(min(8,os.cpu_count()))
     for j in range(games):
         tp.apply_async(openSubprocess)
     tp.close()
