@@ -1,61 +1,12 @@
-import subprocess
 import time
 import os
 import signal
 import math
 import pandas as pd
+from numpy import eye
 from scipy.optimize import minimize
-from multiprocessing.pool import ThreadPool
+from runprocessing import *
 
-def multiprocess():
-    games=500
-    concurent_process=8
-    p = [None]*concurent_process
-    files = [None]*concurent_process
-    for j in range(int(round(games/concurent_process,0))):
-        # print("batch:"+str(j))
-        for i in range(concurent_process):
-            # files[i]=open('log'+str(i),'w')
-            try:
-                # p[i]=subprocess.Popen(["python","smp.py"],stdout=files[i],stderr=files[i])
-                p[i]=subprocess.Popen(["python","smp.py"],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-                time.sleep(0.01)
-            except Exception as e:
-                print("EXCEPTION: "+e)
-            # else:
-            #     print("Finished RUN")
-        status = [None]*concurent_process
-        # while None in status:
-        #     for i in range(concurent_process):
-        #         print('process '+str(i)+': '+str(status[i]))
-        #         status[i]=p[i].poll()
-        #     time.sleep(5)
-        for process in p:
-            process.wait()
-
-def multiprocess2():
-    games=500
-
-    tp=ThreadPool(min(8,os.cpu_count()))
-    for j in range(games):
-        tp.apply_async(openSubprocess)
-    tp.close()
-    tp.join()
-        
-
-def openSubprocess():
-    process=subprocess.Popen(["python","smp.py"],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-    process.wait()
-
-def singleprocess():
-    for i in range(50):
-        try:
-            out = subprocess.run("python smp.py", check=True, shell=True)
-            print(out)
-        except Exception as e:
-            print("EXCEPTION: "+e)
-    else:
-        print("Finished RUN")
 
 def runcampaign(params,multiprocess_run=True):
     ## primero escribo parámetros a archivo
@@ -86,7 +37,7 @@ def runcampaign(params,multiprocess_run=True):
 
     ## luego corro la campaña
     if multiprocess_run:
-        multiprocess2()
+        multiprocess()
     else:
         singleprocess()
 
@@ -109,7 +60,7 @@ def runcampaign(params,multiprocess_run=True):
     won_games=0
     games_in_campaign=0
     list=[]
-    cma150=pd.Series([math.nan],dtype='float64')
+    cma200=pd.Series([math.nan],dtype='float64')
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
         for frame in frames:
@@ -162,9 +113,10 @@ def main():
         signal.signal(signal.SIGINT, prepare_exit)
         signal.signal(signal.SIGTERM, prepare_exit)
 
-        initial_guess=[0.5,0.5,0.5,0.5]
+        initial_guess=[0.0,0.0,0.0,0.0]
         boundaries=((0,1),(0,1),(0,1),(0,1))
-        res=minimize(runcampaign,method='Powell',x0=[initial_guess],bounds=boundaries,options={"maxiter":400,"xtol":0.05,"ftol":0.05})
+        direction=eye(len(initial_guess),dtype=float)*0.1
+        res=minimize(runcampaign,method='Powell',x0=[initial_guess],bounds=boundaries,options={"maxiter":400,"direc":direction,"xtol":0.01,"ftol":0.01})
         print(res)
     except Exception as e:
         print(e)

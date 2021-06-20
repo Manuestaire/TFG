@@ -385,9 +385,9 @@ class Manu(Strategy):
 
     def end(self, private_information, public_information):
         self.addRow(private_information, public_information)
-        ax=None
-        self.game_df.loc[:,"SpongeBob":"Evie"].plot(ax=ax)
-        self.game_df[["round","auction_round"]].plot(ax=ax)
+        # ax=None
+        # self.game_df.loc[:,"SpongeBob":"Evie"].plot(ax=ax)
+        # self.game_df[["round","auction_round"]].plot(ax=ax)
         # plt.show()
         timestr = time.strftime("%Y%m%d_%H%M%S")
         outdir = "./data"+self.campaign_folder
