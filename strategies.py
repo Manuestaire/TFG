@@ -89,7 +89,11 @@ class Manu(Strategy):
             row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
             #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
 
-            row_df.at[0,'tech_gain_passive' if public_info['auction_round']<=1 else 'tech_gain_bid']=tech_gain
+            if public_info['auction_round']<=1:
+                row_df.at[0,'tech_gain_passive']=tech_gain
+            elif ('Manu' in public_information['last_winning_bidders']): 
+                row_df.at[0,'tech_gain_bid']=tech_gain
+
         except Exception:
             print('Error al generar fila en la ronda ',public_info['round'])
         self.game_df = self.game_df.append(row_df,ignore_index=True) #add row to game_df
@@ -335,7 +339,7 @@ class Manu(Strategy):
         #### END Read persistent data ####
 
         #### READ PREVIOUS GAMES:
-        if(random()<0.15): #due to performance reasons we only run fitness tests on 15% games
+        if(random()<0.05): #due to performance reasons we only run fitness tests on 15% games
             filename_list=[]
             for root, dirs, filenames in os.walk('./data'):
                 for name in filenames:
