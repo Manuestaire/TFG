@@ -3,6 +3,7 @@ This file is meant to be modified to define the players active in the game.
 """
 
 from strategies import *
+from modelstrategy import TemplateStrategy
 
 # Define players here.
 
@@ -23,4 +24,9 @@ player_dict = {
     'Manu' : Manu(),
     #'Observer' : Observer(),
     'Evie' : EVBot(),
+    ##Template players:
+    # 'Launcher':TemplateStrategy('Launcher',0.0,0.0,0,0),
+    # 'Passive':TemplateStrategy('Passive',0.0,1.0,0.0,0.0),
+    # 'Gambler':TemplateStrategy('Gambler',1.0,1.0,1.0,1.0),
+
 }
