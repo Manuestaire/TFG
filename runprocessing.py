@@ -49,6 +49,13 @@ def multiprocess2(games=500):
         tp.apply_async(openSubprocess)
     tp.close()
     tp.join()
+    
+def multiprocess3(games=1000):
+
+    tp=ThreadPool(min(8,os.cpu_count()))
+    tp.imap_unordered(openSubprocess,range(games))
+    tp.close()
+    tp.join()
         
 
 def openSubprocess(i=None):

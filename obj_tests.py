@@ -9,47 +9,8 @@ import matplotlib.pyplot as plt
 
 import scipy.signal as sgn
 
+from runprocessing import *
 
-def multiprocess():
-    games=1000
-    concurent_process=8
-    p = [None]*concurent_process
-    files = [None]*concurent_process
-    for j in range(int(round(games/concurent_process,0))):
-        # print("batch:"+str(j))
-        for i in range(concurent_process):
-            # try:
-            #     out = subprocess.run("python smp.py", check=True, shell=True)
-            #     print(out)
-            # except Exception as e:
-            #     print("EXCEPTION: "+e)
-            files[i]=open('log'+str(i),'w')
-            try:
-                # p[i]=subprocess.Popen(["python","smp.py"],stdout=files[i],stderr=files[i])
-                p[i]=subprocess.Popen(["python","smp.py"],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-                time.sleep(0.01)
-            except Exception as e:
-                print("EXCEPTION: "+e)
-            # else:
-            #     print("Finished RUN")
-        status = [None]*concurent_process
-        # while None in status:
-        #     for i in range(concurent_process):
-        #         # print('process '+str(i)+': '+str(status[i]))
-        #         status[i]=p[i].poll()
-            # time.sleep(5)
-        for process in p:
-            process.wait()
-
-def singleprocess():
-    for i in range(50):
-        try:
-            out = subprocess.run("python smp.py", check=True, shell=True)
-            print(out)
-        except Exception as e:
-            print("EXCEPTION: "+e)
-    else:
-        print("Finished RUN")
 
 def runcampaign(params,multiprocess_run=True):
     ## primero escribo parámetros a archivo
@@ -80,7 +41,7 @@ def runcampaign(params,multiprocess_run=True):
 
     ## luego corro la campaña
     if multiprocess_run:
-        multiprocess()
+        multiprocess2(1200)
     else:
         singleprocess()
 
@@ -155,6 +116,7 @@ def generate_stats(outdir):
         plt.plot(stats['num_games'],stats.drop('num_games',axis=1))
         plt.legend(stats.columns.tolist()[1:])
         
+        #figure 2
         plt.figure()
         plt.plot(stats['num_games'],stats['win_percent'],'o--')
         filtered=sgn.savgol_filter(stats['win_percent'],101,0)
@@ -167,13 +129,21 @@ def generate_stats(outdir):
         plt.plot(stats['num_games'],filtered2)
         plt.plot(stats['num_games'],filtered3)
         plt.legend(['sample','0 degree','1st degree','2nd degree','3rd degree'])
+
+        #figure 3
         plt.figure()
         modes = ['full', 'same', 'valid']
-        for m in modes:
-            plt.plot(np.convolve(stats['win_percent'].to_numpy(), np.ones(50)/50, mode=m))
         plt.plot(stats['num_games'],stats['win_percent'],'o--')
-        plt.legend(modes+['sample'])
+        cnv_aux=[]
+        for i in range(3):
+            cnv_aux.append(np.convolve(stats['win_percent'].to_numpy(), np.ones(50)/50, mode=modes[i]))
+        plt.plot(range(-25,int(len(cnv_aux[0])-25)),cnv_aux[0])
+        plt.plot(range(0,int(len(cnv_aux[1]))),cnv_aux[1])
+        plt.plot(range(+25,int(len(cnv_aux[2])+25)),cnv_aux[2])
+        plt.legend(['sample']+modes)
         plt.grid(True,which='both')
+
+        #figure 4
         plt.figure()
         plt.plot(stats['num_games'],stats['win_percent'],'o--')
         windows=[26,50,100]
@@ -182,35 +152,42 @@ def generate_stats(outdir):
             plt.plot(range(int(window/2),int(len(aux)+window/2)),aux)
         plt.grid(True,which='both')
         plt.legend(['sample']+ windows)
+
+        #figure 5
         plt.figure()
+        plt.grid(True,which='both')
         plt.plot(stats['num_games'],stats['win_percent'],'o--')
-        sma25=stats.loc[:,'win_percent'].rolling(window=25).mean()
+        #sma25=stats.loc[:,'win_percent'].rolling(window=25).mean()
         sma50=stats.loc[:,'win_percent'].rolling(window=50).mean()
         sma100=stats.loc[:,'win_percent'].rolling(window=100).mean()
         sma200=stats.loc[:,'win_percent'].rolling(window=200).mean()
-        plt.plot(stats['num_games'],sma25)
+        #plt.plot(stats['num_games'],sma25)
         plt.plot(stats['num_games'],sma50)
         plt.plot(stats['num_games'],sma100)
         plt.plot(stats['num_games'],sma200)
         df=stats.loc[:,'win_percent']
         cma=df.expanding(min_periods=10).mean()
         plt.plot(stats['num_games'],cma)
-        ema=df.ewm(span=25,adjust=False).mean()
+        ema=df.ewm(span=50,adjust=False).mean()
         plt.plot(stats['num_games'],ema)
-        plt.legend(['sample','SMA 25','SMA 50','SMA 100','SMA 200','CMA','EMA 25'])
+        #plt.legend(['sample','SMA 25','SMA 50','SMA 100','SMA 200','CMA','EMA 25'])
+        plt.legend(['sample','SMA 50','SMA 100','SMA 200','CMA','EMA 50'])
+        
+        #figure 6
         plt.figure()
+        plt.grid(True,which='both')
         plt.plot(stats['num_games'],stats['win_percent'],'o--')
         cma=df.expanding(min_periods=50).mean()
         cma50=(df.iloc[50:]).expanding(min_periods=25).mean()
         cma100=(df.iloc[100:]).expanding(min_periods=25).mean()
-        cma150=(df.iloc[150:]).expanding(min_periods=25).mean()
         cma200=(df.iloc[200:]).expanding(min_periods=25).mean()
+        cma400=(df.iloc[400:]).expanding(min_periods=25).mean()
         plt.plot(stats['num_games'],cma)
         plt.plot(range(50,50+len(cma50)),cma50)
         plt.plot(range(100,100+len(cma100)),cma100)
-        plt.plot(range(150,150+len(cma150)),cma150)
         plt.plot(range(200,200+len(cma200)),cma200)
-        plt.legend(['sample','CMA','CMA 50*','CMA 100*','CMA 150*','CMA 200*'])
+        plt.plot(range(400,400+len(cma400)),cma400)
+        plt.legend(['sample','CMA','CMA 100*','CMA 150*','CMA 200*','CMA 400*'])
         plt.show()
 
 
@@ -221,9 +198,16 @@ def main():
         signal.signal(signal.SIGINT, prepare_exit)
         signal.signal(signal.SIGTERM, prepare_exit)
         
-        generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210605_024635")
-        # generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210605_030229")
-        # runcampaign([0.5,0.5,0.5,0.5])
+        # generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210610_091737")
+        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210605_030229")
+        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data\campaign_20210605_024635")
+        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210626_220603")
+        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210627_123019")
+        #/data/campaign_20210627_125248 500 games, buen dibujo [0.2,0.5,0.5,0.5]
+        
+        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210627_144356")
+        generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/testdata")
+        # runcampaign([0.2,0.5,0.5,0.5])
     except Exception as e:
         print(e)
     finally:
@@ -231,7 +215,7 @@ def main():
         
 
 
-def prepare_exit():
+def prepare_exit(signum=None,frame=None):
     if os.path.exists('campaigndata.csv'):
             os.rename('campaigndata.csv','campaigndata_'+time.strftime("%Y%m%d_%H%M%S")+'.csv')
 
