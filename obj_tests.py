@@ -118,7 +118,7 @@ def generate_stats(outdir):
         
         #figure 2
         plt.figure()
-        plt.plot(stats['num_games'],stats['win_percent'],'o--')
+        plt.plot(stats['num_games'],stats['win_percent'],marker='o',linestyle=':',linewidth=0.2,markersize=2)
         filtered=sgn.savgol_filter(stats['win_percent'],101,0)
         filtered1=sgn.savgol_filter(stats['win_percent'],101,1)
         filtered2=sgn.savgol_filter(stats['win_percent'],101,2)
@@ -133,7 +133,7 @@ def generate_stats(outdir):
         #figure 3
         plt.figure()
         modes = ['full', 'same', 'valid']
-        plt.plot(stats['num_games'],stats['win_percent'],'o--')
+        plt.plot(stats['num_games'],stats['win_percent'],marker='o',linestyle=':',linewidth=0.2,markersize=1)
         cnv_aux=[]
         for i in range(3):
             cnv_aux.append(np.convolve(stats['win_percent'].to_numpy(), np.ones(50)/50, mode=modes[i]))
@@ -145,7 +145,7 @@ def generate_stats(outdir):
 
         #figure 4
         plt.figure()
-        plt.plot(stats['num_games'],stats['win_percent'],'o--')
+        plt.plot(stats['num_games'],stats['win_percent'],marker='o',linestyle=':',linewidth=0.2,markersize=1)
         windows=[26,50,100]
         for window in windows:
             aux=np.convolve(stats['win_percent'].to_numpy(), np.ones(window)/window, mode='valid')
@@ -156,7 +156,7 @@ def generate_stats(outdir):
         #figure 5
         plt.figure()
         plt.grid(True,which='both')
-        plt.plot(stats['num_games'],stats['win_percent'],'o--')
+        plt.plot(stats['num_games'],stats['win_percent'],marker='o',linestyle=':',linewidth=0.2,markersize=1)
         #sma25=stats.loc[:,'win_percent'].rolling(window=25).mean()
         sma50=stats.loc[:,'win_percent'].rolling(window=50).mean()
         sma100=stats.loc[:,'win_percent'].rolling(window=100).mean()
@@ -176,7 +176,7 @@ def generate_stats(outdir):
         #figure 6
         plt.figure()
         plt.grid(True,which='both')
-        plt.plot(stats['num_games'],stats['win_percent'],'o--')
+        plt.plot(stats['num_games'],stats['win_percent'],marker='o',linestyle=':',linewidth=0.2,markersize=1)
         cma=df.expanding(min_periods=50).mean()
         cma50=(df.iloc[50:]).expanding(min_periods=25).mean()
         cma100=(df.iloc[100:]).expanding(min_periods=25).mean()
@@ -205,8 +205,8 @@ def main():
         #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210627_123019")
         #/data/campaign_20210627_125248 500 games, buen dibujo [0.2,0.5,0.5,0.5]
         
-        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210627_144356")
-        generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/testdata")
+        generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210627_144356")
+        #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/testdata")
         # runcampaign([0.2,0.5,0.5,0.5])
     except Exception as e:
         print(e)
