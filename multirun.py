@@ -25,7 +25,7 @@ def runcampaign(params,multiprocess_run=True):
     filepath='campaigndata.csv'
 
     data=[timestr, params[0], params[1], params[2], params[3],0,0]
-    row=pd.Series(data,index=['date','joindecision_threshold','launchdecision_threshold','raisebid_factor','risk_factor','sma','cma (obj)'])
+    row=pd.Series(data,index=['date','joindecision_threshold','launchdecision_threshold','raisebid_factor','risk_factor','sma (obj)','cma'])
     df = None
     if os.path.exists(filepath):
         print('Saving to existing file')
@@ -37,7 +37,7 @@ def runcampaign(params,multiprocess_run=True):
 
     ## luego corro la campaña
     if multiprocess_run:
-        multiprocess()
+        multiprocess2(2000)
     else:
         singleprocess()
 
@@ -60,7 +60,7 @@ def runcampaign(params,multiprocess_run=True):
     won_games=0
     games_in_campaign=0
     list=[]
-    cma200=pd.Series([math.nan],dtype='float64')
+    sma200=pd.Series([math.nan],dtype='float64')
     if (len(frames)>0):
         #aux[aux['AggressiveLauncher']<0]['round'].iloc[0] #pilla la ronda en la que entra en bancarrota
         for frame in frames:
@@ -91,7 +91,7 @@ def runcampaign(params,multiprocess_run=True):
             #     obj+=z
             #     games_in_campaign+=1
             list.append(1-(won_games/games_in_campaign))
-        stats=pd.Series(list[200:], dtype='float64')
+        stats=pd.Series(list[250:], dtype='float64')
         cma200=stats.expanding(min_periods=25).mean()
         sma200=stats.rolling(window=200).mean()
         print('sma:'+str(sma200.iloc[-1])+' cma:'+str(cma200.iloc[-1]))
@@ -99,7 +99,7 @@ def runcampaign(params,multiprocess_run=True):
         df.iloc[-1,-1]=cma200.iloc[-1]
         df.iloc[-1,-2]=sma200.iloc[-1]
         df.to_csv(filepath,sep=';')
-    return cma200.iloc[-1]
+    return sma200.iloc[-1]
 
 
 def main():
@@ -113,11 +113,22 @@ def main():
         signal.signal(signal.SIGINT, prepare_exit)
         signal.signal(signal.SIGTERM, prepare_exit)
 
-        initial_guess=[0.0,0.0,0.0,0.0]
-        boundaries=((0,1),(0,1),(0,1),(0,1))
+        initial_guess=[0.3,0.7,0.7,0.0]
+        boundaries=((0,1),(0,1),(0,1),(-0.5,1))
         direction=eye(len(initial_guess),dtype=float)*0.1
-        res=minimize(runcampaign,method='Powell',x0=[initial_guess],bounds=boundaries,options={"maxiter":400,"direc":direction,"xtol":0.01,"ftol":0.01})
+        min_options={"maxiter":400,"direc":direction,"xtol":0.02,"ftol":0.02}
+        res=minimize(runcampaign,method='Powell',x0=[initial_guess],bounds=boundaries,options=min_options)
+        # min_options={"maxfun":501,"eps":0.05,"ftol":0.02,"gtol":0.02}
+        # res=minimize(runcampaign,method='L-BFGS-B',x0=[initial_guess],bounds=boundaries,options=min_options)
         print(res)
+        with open('optimizationresult.txt', 'w+') as f:
+            print("Bounds:", file=f)
+            print(boundaries, file=f)
+            print("initial_guess:", file=f)
+            print(initial_guess, file=f)
+            print("options:", file=f)
+            print(min_options, file=f)
+            print(res, file=f)
     except Exception as e:
         print(e)
     finally:
