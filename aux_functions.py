@@ -3,6 +3,20 @@ import time
 import pandas as pd
 
 from scipy import stats
+from typing import NamedTuple
+
+class lognormData(NamedTuple):
+    mean: float
+    var: float
+    loc: float = 0.0
+    def shape(self):
+        return self.var
+    def location(self):
+        return self.loc
+    def scale(self):
+        return numpy.exp(self.mean)
+    def distribution(self):
+        return stats.lognorm(self.shape(),loc=self.location(),scale=self.scale())
 
 def getTimeNow():
     return time.strftime("%Y%m%d_%H%M%S")

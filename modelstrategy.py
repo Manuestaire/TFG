@@ -12,7 +12,6 @@ import time
 import copy
 
 from aux_functions import *
-from offline_analysis import lognormData
 from strategies import Strategy
 
 class TemplateStrategy(Strategy):
@@ -122,7 +121,9 @@ class TemplateStrategy(Strategy):
         total_bids=sum(counts)
 
         #lógica de bid_amount:
-        if((won_bids-shared_wins)/total_bids > (self.raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
+        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*(self.risk_factor+0.5)):
+            bid_amount=1
+        elif((won_bids-shared_wins)/total_bids > (self.raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
             bid_amount= min(math.ceil(self.prev_bid/2)+1,self.prev_bid-1)
         elif(self.name not in public_information['last_winning_bidders']):
             bid_amount=self.prev_bid+3
@@ -134,8 +135,7 @@ class TemplateStrategy(Strategy):
         bid_amount=max(0,bid_amount)
 
         
-        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*(self.risk_factor+0.5)):
-            bid_amount=1
+        
 
         ## Memory vars: ##
         self.launched=launch

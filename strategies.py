@@ -21,7 +21,6 @@ import time
 import copy
 
 from aux_functions import *
-from offline_analysis import lognormData
 from random import random
 
 
