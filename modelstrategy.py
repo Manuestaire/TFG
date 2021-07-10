@@ -61,19 +61,25 @@ class TemplateStrategy(Strategy):
             del public_info['players']
             extend_dict={'tech':numpy.NaN,'tech_gain_passive':numpy.NaN,'tech_at_join':numpy.NaN,'tech_gain_bid':numpy.NaN}
 
+            try:
+                if public_info['auction_round']<=1:
+                    extend_dict['tech_gain_passive']=tech_gain
+                elif (self.name in public_information['last_winning_bidders']): 
+                    extend_dict['tech_gain_bid']=tech_gain
+
+                extend_dict['tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
+            except Exception:
+                print('Manu: Error menor al generar fila en la ronda ',public_info['round'])
+            
             row_dict={**public_info,**players_dict,**extend_dict}
             row_df=pd.DataFrame.from_dict(row_dict,orient='index').T.infer_objects()
     
-            row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
             #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
 
-            if public_info['auction_round']<=1:
-                row_df.at[0,'tech_gain_passive']=tech_gain
-            elif (self.name in public_information['last_winning_bidders']): 
-                row_df.at[0,'tech_gain_bid']=tech_gain
         except Exception:
             print(self.name+': Error al generar fila en la ronda ',public_info['round'])
         self.game_df = self.game_df.append(row_df,ignore_index=True) #add row to game_df
+        # self.game_df = pd.concat([self.game_df,row_df],ignore_index=True,copy=False)
         return row_df
 
     def bid(self, private_information, public_information):
@@ -133,8 +139,6 @@ class TemplateStrategy(Strategy):
             bid_amount-=1 #si la gané yo sólo voy reduciendo de uno en uno
 
         bid_amount=max(0,bid_amount)
-
-        
         
 
         ## Memory vars: ##
@@ -192,9 +196,9 @@ class TemplateStrategy(Strategy):
             base_reward_dist=lognormData(distrib_data['base_reward_mean'],distrib_data['base_reward_variance'], distrib_data['base_reward_location'])
             payoff_dist = lognormData(distrib_data['mining_payoff_mean'],distrib_data['mining_payoff_variance'], distrib_data['mining_payoff_location'])
 
-            # self.br_expect=base_reward_dist.distribution().expect()
-            # self.payoff_expect= payoff_dist.distribution().expect()
-            # self.unkn_expect=  self.payoff_expect -  self.br_expect
+            self.br_expect=base_reward_dist.distribution().expect()
+            self.payoff_expect= payoff_dist.distribution().expect()
+            self.unkn_expect=  self.payoff_expect -  self.br_expect
         else:
             print("ERROR: couldn't find persistance data from offline analysis")
         #### END Read persistent data ####

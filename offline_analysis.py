@@ -72,6 +72,7 @@ class offlineAnalysis:
                 file_df = pd.read_csv(filename,sep=';',index_col=0)                    
                 file_df.columns = file_df.columns.str.replace(" ", "")
                 frames.append(file_df)
+                print(filename)
             except Exception as e:
                 print('Error al leer archivo ',filename)
                 print(e)
@@ -91,9 +92,9 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
         if sample_df.size > 0 :
             # we need to drop the values where the round does not advance
             #(self.sample_df.loc[self.sample_df['auction_round']==1])['last_mining_payoff'].mean()
-            
+            ar=sample_df.loc[sample_df['auction_round']==1]
             ###### BEGIN base_reward ######
-            base_reward=(sample_df.loc[sample_df['auction_round']==1])['base_reward'].dropna()
+            base_reward=ar['base_reward'].dropna()
             br_bins=numpy.arange(-1,base_reward.max())+0.5
             base_reward.hist(bins=br_bins, density=True) 
             
@@ -126,7 +127,7 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
             ###### BEGIN mining_payoff ######
             # PLOT histograma:
             plt.figure()
-            mining_payoff=(sample_df.loc[sample_df['auction_round']==1])['last_mining_payoff'].dropna()
+            mining_payoff=ar['last_mining_payoff'].dropna()
             payoff_bins=numpy.arange(-1,mining_payoff.max())+0.5
             mining_payoff.hist(bins=payoff_bins,density=True) 
             payoff_hist = numpy.histogram(mining_payoff, bins=payoff_bins, density=True)
@@ -168,7 +169,7 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
 
             # PLOT cdf real y estimado
             plt.figure()
-            base_reward_test=(sample_df.loc[sample_df['auction_round']==1])['base_reward'].dropna()
+            base_reward_test=ar['base_reward'].dropna()
             # t_ret2 = stats.cramervonmises(base_reward_test,payoff_distribution.cdf)
             plt.plot(x_axis,payoff_cdf)
             plt.plot(x_axis,payoff_theor_cdf)
@@ -178,10 +179,9 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
 
             # PLOT base_reward<->payoff correlation
             plt.figure()
-            a = (sample_df.loc[sample_df['auction_round']==1])
-            correlation = (a['base_reward'].shift(1)).corr(a['last_mining_payoff'])
+            correlation = (ar['base_reward'].shift(1)).corr(ar['last_mining_payoff'])
             print("base_reward to mining_payoff correlation:"+str(correlation))
-            b = a[['base_reward','last_mining_payoff']]
+            b = ar[['base_reward','last_mining_payoff']]
             plt.scatter(b['base_reward'].shift(1),b['last_mining_payoff'],s=1)
             plt.xlabel('base_reward')
             plt.ylabel('last_mining_payoff')
@@ -190,10 +190,10 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
 
             ###### BEGIN Failure chance ######
             # failure_rounds=sample_df.loc[sample_df['last_winning_miner']=='Mission failure']['round']
-            failure_rounds=a.loc[a['last_winning_miner']=='Mission failure']['round']
+            failure_rounds=ar.loc[ar['last_winning_miner']=='Mission failure']['round']
             failure_rounds_arr=numpy.sort(failure_rounds)
             val,count = numpy.unique(failure_rounds_arr,return_counts=True)
-            num_rounds=a['round'].value_counts().reindex(val)
+            num_rounds=ar['round'].value_counts().reindex(val)
             plt.figure()
             plt.bar(val,count/num_rounds.values)
             plt.show(block=False)

@@ -82,20 +82,25 @@ class Manu(Strategy):
             del public_info['players']
             extend_dict={'tech':numpy.NaN,'tech_gain_passive':numpy.NaN,'tech_at_join':numpy.NaN,'tech_gain_bid':numpy.NaN}
 
+            try:
+                if public_info['auction_round']<=1:
+                    extend_dict['tech_gain_passive']=tech_gain
+                elif ('Manu' in public_information['last_winning_bidders']): 
+                    extend_dict['tech_gain_bid']=tech_gain
+
+                extend_dict['tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
+            except Exception:
+                print('Manu: Error menor al generar fila en la ronda ',public_info['round'])
+            
             row_dict={**public_info,**players_dict,**extend_dict}
             row_df=pd.DataFrame.from_dict(row_dict,orient='index').T.infer_objects()
     
-            row_df.at[0,'tech' if public_info['auction_round']<=1 else 'tech_at_join']=private_information['tech']
             #hacer dos series y: https://stackoverflow.com/questions/38109102/combining-two-series-into-a-dataframe-row-wise
 
-            if public_info['auction_round']<=1:
-                row_df.at[0,'tech_gain_passive']=tech_gain
-            elif ('Manu' in public_information['last_winning_bidders']): 
-                row_df.at[0,'tech_gain_bid']=tech_gain
-
         except Exception:
-            print('Error al generar fila en la ronda ',public_info['round'])
+            print('Manu: Error al generar fila en la ronda ',public_info['round'])
         self.game_df = self.game_df.append(row_df,ignore_index=True) #add row to game_df
+        # self.game_df = pd.concat([self.game_df,row_df],ignore_index=True,copy=False)
         return row_df
 
     def bidStrategy(self,public_information,private_information,riskfactor,optimismfactor):
@@ -238,7 +243,9 @@ class Manu(Strategy):
         total_bids=sum(counts)
 
         #lógica de bid_amount:
-        if((won_bids-shared_wins)/total_bids > (self.raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
+        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*(self.risk_factor+0.5)):
+            bid_amount=1
+        elif((won_bids-shared_wins)/total_bids > (self.raisebid_factor * (max(len(self.players_tech_count),eliminated_player_count+1)/len(self.players_tech_count)))): #TODO: Rework (la intención era que el factor sea 1 cuando quedemos 2)
             bid_amount= min(math.ceil(self.prev_bid/2)+1,self.prev_bid-1)
         elif('Manu' not in public_information['last_winning_bidders']):
             bid_amount=self.prev_bid+3
@@ -249,23 +256,13 @@ class Manu(Strategy):
 
         bid_amount=max(0,bid_amount)
 
-        
-        if(self.tech_cost>(public_information['base_reward']+self.unkn_expect)*(self.risk_factor+0.5)):
-            bid_amount=1
-
-        # for sublist in counts.index.values:
-        #     if 'Manu' in sublist:
-        #         print("found")
-        #         counts[sublist]
-
-        #if 
 
         ## Memory vars: ##
         self.launched=launch
         self.prev_tech=private_information['tech']
         self.prev_bid=bid_amount
 
-        return bid_amount, launch
+        return min(private_information['bankroll'],bid_amount), launch
 
     def join_launch(self, private_information, public_information):
         
@@ -330,15 +327,15 @@ class Manu(Strategy):
             base_reward_dist=lognormData(distrib_data['base_reward_mean'],distrib_data['base_reward_variance'], distrib_data['base_reward_location'])
             payoff_dist = lognormData(distrib_data['mining_payoff_mean'],distrib_data['mining_payoff_variance'], distrib_data['mining_payoff_location'])
 
-            # self.br_expect=base_reward_dist.distribution().expect()
-            # self.payoff_expect= payoff_dist.distribution().expect()
-            # self.unkn_expect=  self.payoff_expect -  self.br_expect
+            self.br_expect=base_reward_dist.distribution().expect()
+            self.payoff_expect= payoff_dist.distribution().expect()
+            self.unkn_expect=  self.payoff_expect -  self.br_expect
         else:
             print("ERROR: couldn't find persistance data from offline analysis")
         #### END Read persistent data ####
 
         #### READ PREVIOUS GAMES:
-        if(random()<0.05): #due to performance reasons we only run fitness tests on 15% games
+        if(random()<0.05): #due to performance reasons we only run fitness tests on 5% games
             filename_list=[]
             for root, dirs, filenames in os.walk('./data'):
                 for name in filenames:
@@ -348,7 +345,7 @@ class Manu(Strategy):
                     else:
                         print("UNKNOWN FILE EXT:"+root+'/'+name)
             frames=[]
-            for filename in filename_list[-250:]:
+            for filename in filename_list[-500:]:
                 try:
                     print(filename)
                     file_df = pd.read_csv(filename,sep=';',index_col=0)                    
