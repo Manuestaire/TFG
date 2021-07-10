@@ -60,7 +60,7 @@ def multiprocess3(games=1000):
 
 def openSubprocess(i=None):
     process=subprocess.Popen(["python","smp.py"],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-    process.wait(30)
+    process.wait(40)
 
 def rungame(unused):
     from smp import main as game

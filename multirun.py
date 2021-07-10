@@ -70,9 +70,9 @@ def runcampaign(params,multiprocess_run=True):
             else:
                 rounds_till_end=0
 
-            money_diff=(frame.loc[frame.index[-1],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-1].item())/200 #0 si soy yo // positivo estoy por detrás (maximizo la distancia con el segundo)
+            money_diff=(frame.iloc[-1,frame.columns.get_loc('base_reward')+1:frame.columns.get_loc('tech')].values.max()-frame['Manu'].iloc[-1].item())/200 #0 si soy yo // positivo estoy por detrás (maximizo la distancia con el segundo)
             if math.isnan(money_diff):
-                money_diff=(frame.loc[frame.index[-2],"SpongeBob":"Evie"].values.max()-frame['Manu'].iloc[-2].item())/200 #workaround para evitar NaN
+                money_diff=(frame.iloc[-2,frame.columns.get_loc('base_reward')+1:frame.columns.get_loc('tech')].values.max()-frame['Manu'].iloc[-2].item())/200 #workaround para evitar NaN
 
 
             if not (math.isnan(rounds_till_end) or math.isnan(money_diff)):
@@ -113,9 +113,9 @@ def main():
         signal.signal(signal.SIGINT, prepare_exit)
         signal.signal(signal.SIGTERM, prepare_exit)
 
-        initial_guess=[0.3,0.7,0.7,0.0]
+        initial_guess=[0.33,0.63,0.628,-0.142]
         boundaries=((0,1),(0,1),(0,1),(-0.5,1))
-        direction=eye(len(initial_guess),dtype=float)*0.1
+        direction=eye(len(initial_guess),dtype=float)*0.2
         min_options={"maxiter":400,"direc":direction,"xtol":0.02,"ftol":0.02}
         res=minimize(runcampaign,method='Powell',x0=[initial_guess],bounds=boundaries,options=min_options)
         # min_options={"maxfun":501,"eps":0.05,"ftol":0.02,"gtol":0.02}
