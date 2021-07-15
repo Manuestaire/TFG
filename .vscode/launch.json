@@ -45,6 +45,14 @@
             "program": "${workspaceFolder}/vstest.py",
             "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"600",
                    "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"100"}
+        },
+        {
+            "name": "TESTCampaign",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/testcampaign.py",
+            "env":{"PYDEVD_WARN_EVALUATION_TIMEOUT":"600",
+                   "PYDEVD_UNBLOCK_THREADS_TIMEOUT":"100"}
         }
     ]
 }

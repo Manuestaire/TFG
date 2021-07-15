@@ -4,15 +4,14 @@ from runprocessing import *
 import pandas as pd
 import math
 
-def main():
-    players={
-        'Launcher'      :["TemplateStrategy('","',0.0,0.0,0,0)"],
-        'Passive'       :["TemplateStrategy('","',0.0,1.0,0.0,0.0)"],
-        'Equilibrated'  :["TemplateStrategy('","',0.5,0.5,0.5,0.5)"],
-        'Gambler'       :["TemplateStrategy('","',0.5,0.5,1.0,1.0)"],
-    }
+players={
+    'Launcher'      :["TemplateStrategy('","',0.0,0.0,0,0)"],
+    'Passive'       :["TemplateStrategy('","',0.0,1.0,0.0,0.0)"],
+    'Equilibrated'  :["TemplateStrategy('","',0.5,0.5,0.5,0.5)"],
+    'Gambler'       :["TemplateStrategy('","',0.5,0.5,1.0,1.0)"],
+}
 
-    head='''
+head='''
 from strategies import *
 from modelstrategy import TemplateStrategy
 
@@ -20,8 +19,15 @@ from modelstrategy import TemplateStrategy
 
 player_dict = {
     '''
-    foot='''
+default_players=''''SpongeBob' : SpongeBob(),
+    'PassiveLauncher' : PassiveLauncher(),
+    'AlwaysLauncher' : AlwaysLaunch(),
+    'AggressiveLauncher' : AggressiveLauncher(),
+    'Evie' : EVBot(),'''
+foot='''
 }'''
+
+def main():
 
     dictresults={}
     for name1,player1 in players.items():

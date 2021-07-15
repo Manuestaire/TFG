@@ -113,6 +113,8 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
             plt.plot(r_range,r_dist2)
             plt.title('base_reward') 
             plt.legend(['basic parametric estimation','scipy-fit (with location)'])
+            plt.xlabel('x')
+            plt.ylabel('f(x)')
             plt.show(block=False)
             baser_mean=r_mean2
             baser_var=rshape
@@ -158,7 +160,9 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
             payoff_theor_cdf=payoff_distribution.cdf(x_axis) #!!mover!
 
             plt.title('mining payoff') 
-            plt.legend(['basic parametric estimation','parametric with displacement','scipy-fit (with location parameter)'])    
+            plt.legend(['basic parametric estimation','parametric with displacement','scipy-fit (with location parameter)']) 
+            plt.xlabel('x')
+            plt.ylabel('f(x)')   
             plt.show(block=False)
             payoff_mean=mean
             payoff_var=shape
@@ -174,6 +178,8 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
             plt.plot(x_axis,payoff_cdf)
             plt.plot(x_axis,payoff_theor_cdf)
             plt.legend(['payoff cdf','parametric-estimated payoff cdf'])
+            plt.xlabel('x')
+            plt.ylabel('F(x)')
             plt.show(block=False)
             
 
@@ -196,6 +202,8 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
             num_rounds=ar['round'].value_counts().reindex(val)
             plt.figure()
             plt.bar(val,count/num_rounds.values)
+            plt.ylabel('f(x)')
+            plt.xlabel('round #')
             plt.show(block=False)
             ###### END Failure chance ######
 
@@ -220,6 +228,8 @@ def analyze(sample_df : pd.DataFrame, show_figures=True, old_sample=numpy.array(
             won_tech_bid=sample_df['tech_gain_bid']
             won_tech_bid.dropna().hist(bins=numpy.arange(-1,11)+0.5,density=True,ax=ax[1])
             ax[1].set_title('tech_gain_bid') 
+            plt.setp(ax[:], xlabel='x')
+            plt.setp(ax[0], ylabel='f(x)')
             plt.show() if show_figures else plt.figure()
             ###### END won_tech ######
 

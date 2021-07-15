@@ -115,6 +115,9 @@ def generate_stats(outdir):
         #plot
         plt.plot(stats['num_games'],stats.drop('num_games',axis=1))
         plt.legend(stats.columns.tolist()[1:])
+        plt.grid(True,which='both')
+        plt.xlabel('num_games')
+        plt.ylabel('value')
         
         #figure 2
         plt.figure()
@@ -129,6 +132,8 @@ def generate_stats(outdir):
         plt.plot(stats['num_games'],filtered2)
         plt.plot(stats['num_games'],filtered3)
         plt.legend(['sample','0 degree','1st degree','2nd degree','3rd degree'])
+        plt.xlabel('num_games')
+        plt.ylabel('value')
 
         #figure 3
         plt.figure()
@@ -142,6 +147,8 @@ def generate_stats(outdir):
         plt.plot(range(+25,int(len(cnv_aux[2])+25)),cnv_aux[2])
         plt.legend(['sample']+modes)
         plt.grid(True,which='both')
+        plt.xlabel('num_games')
+        plt.ylabel('value')
 
         #figure 4
         plt.figure()
@@ -152,6 +159,8 @@ def generate_stats(outdir):
             plt.plot(range(int(window/2),int(len(aux)+window/2)),aux)
         plt.grid(True,which='both')
         plt.legend(['sample']+ windows)
+        plt.xlabel('num_games')
+        plt.ylabel('value')
 
         #figure 5
         plt.figure()
@@ -172,6 +181,8 @@ def generate_stats(outdir):
         plt.plot(stats['num_games'],ema)
         #plt.legend(['sample','SMA 25','SMA 50','SMA 100','SMA 200','CMA','EMA 25'])
         plt.legend(['sample','SMA 50','SMA 100','SMA 200','CMA','EMA 50'])
+        plt.xlabel('num_games')
+        plt.ylabel('value')
         
         #figure 6
         plt.figure()
@@ -188,12 +199,15 @@ def generate_stats(outdir):
         plt.plot(range(200,200+len(cma200)),cma200)
         plt.plot(range(400,400+len(cma400)),cma400)
         plt.legend(['sample','CMA','CMA 100*','CMA 150*','CMA 200*','CMA 400*'])
+        plt.xlabel('num_games')
+        plt.ylabel('value')
+        
         plt.show()
 
 
 def main():
     try:
-        print("Hello World!")
+        print("Starting obj_tests!!")
         #### SIGNAL HANDLERS ####
         signal.signal(signal.SIGINT, prepare_exit)
         signal.signal(signal.SIGTERM, prepare_exit)
@@ -208,6 +222,7 @@ def main():
         generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/campaign_20210627_144356")
         #generate_stats("D:\Bibliotecas\Documentos\python\Space-mining-poker-master\data/testdata")
         # runcampaign([0.2,0.5,0.5,0.5])
+        # runcampaign([0.33,0.63,0.628,-0.142])
     except Exception as e:
         print(e)
     finally:
