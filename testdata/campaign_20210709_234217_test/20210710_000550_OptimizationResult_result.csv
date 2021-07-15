@@ -1,0 +1,206 @@
+;round;last_winning_bid;last_winning_bidders;auction_round;last_winning_miner;last_launchers;last_mining_payoff;base_reward;SpongeBob;PassiveLauncher;AlwaysLauncher;AggressiveLauncher;Evie;OptimizationResult;Sample1;Sample2;tech;tech_gain_passive;tech_at_join;tech_gain_bid
+0;1;0;[];1;;;;8;995;995;995;995;995;995;995;995;7.0;7.0;7.0;
+1;2;8;['SpongeBob'];1;AggressiveLauncher;['PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher', 'Evie'];19;3;982;985;985;1004;985;990;990;990;10.0;3.0;10.0;
+2;3;16;['AggressiveLauncher'];1;AlwaysLauncher;['SpongeBob', 'PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher', 'Evie'];22;4;972;975;997;978;975;985;985;985;13.0;3.0;13.0;
+3;4;32;['AggressiveLauncher'];1;Evie;['PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher', 'Evie'];11;3;967;965;987;936;976;980;980;980;16.0;3.0;16.0;
+4;5;64;['AggressiveLauncher'];1;SpongeBob;['SpongeBob', 'PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher'];15;1;972;955;977;862;971;975;975;975;16.0;0.0;16.0;
+5;6;128;['AggressiveLauncher'];1;AlwaysLauncher;['PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher', 'Evie'];47;2;967;945;1014;724;961;970;970;970;22.0;6.0;22.0;
+6;7;256;['AggressiveLauncher'];1;AggressiveLauncher;['SpongeBob', 'PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher', 'Evie'];22;3;957;935;1004;480;951;965;965;965;31.0;9.0;31.0;
+7;8;480;['AggressiveLauncher'];1;Mission failure;['PassiveLauncher', 'AlwaysLauncher', 'AggressiveLauncher', 'Evie'];20;6;952;925;994;-10;941;960;960;960;33.0;2.0;33.0;
+8;9;432;['PassiveLauncher'];1;AlwaysLauncher;['PassiveLauncher', 'AlwaysLauncher', 'Evie'];28;8;947;483;1012;-10;931;955;955;955;42.0;9.0;42.0;
+9;10;389;['PassiveLauncher'];1;SpongeBob;['SpongeBob', 'PassiveLauncher', 'AlwaysLauncher', 'Evie'];24;4;961;84;1002;-10;921;950;950;950;51.0;9.0;51.0;
+10;11;84;['PassiveLauncher'];1;PassiveLauncher;['PassiveLauncher', 'AlwaysLauncher', 'Evie'];18;17;956;8;992;-10;911;945;945;945;60.0;9.0;60.0;
+11;12;17;['SpongeBob'];1;Mission failure;['PassiveLauncher', 'AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];41;2;934;-2;982;-10;901;935;935;935;7.0;7.0;16.0;9.0
+12;13;4;['OptimizationResult', 'Sample1', 'Sample2'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher'];13;1;937;-2;972;-10;896;926;926;926;22.0;6.0;22.0;
+13;14;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];6;28;932;-2;962;-10;890;921;921;921;24.0;2.0;24.0;
+14;15;28;['SpongeBob'];1;Sample2;['SpongeBob', 'AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];54;16;894;-2;952;-10;880;911;911;965;1.0;1.0;1.0;
+15;16;16;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];38;30;873;-2;942;-10;908;906;906;960;4.0;3.0;4.0;
+16;17;30;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];49;7;882;-2;932;-10;898;901;901;955;13.0;9.0;13.0;
+17;18;7;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];17;2;870;-2;939;-10;888;896;896;950;16.0;3.0;16.0;
+18;19;2;['SpongeBob', 'Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];13;25;863;-2;942;-10;876;891;891;945;22.0;6.0;22.0;
+19;20;25;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher'];33;1;861;-2;932;-10;871;886;886;940;26.0;4.0;26.0;
+20;21;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];3;5;856;-2;925;-10;859;881;881;935;27.0;1.0;27.0;
+21;22;5;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];20;17;846;-2;915;-10;869;876;876;930;28.0;1.0;28.0;
+22;23;17;['SpongeBob'];1;Sample2;['SpongeBob', 'AlwaysLauncher', 'Sample2'];30;6;819;-2;905;-10;864;871;871;950;34.0;6.0;34.0;
+23;24;6;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];27;9;808;-2;895;-10;881;866;866;945;43.0;9.0;43.0;
+24;25;9;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];25;1;814;-2;885;-10;871;861;861;940;47.0;4.0;47.0;
+25;26;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];15;1;809;-2;875;-10;874;856;856;935;47.0;0.0;47.0;
+26;27;2;['Evie'];1;Evie;['SpongeBob', 'AlwaysLauncher', 'Evie'];26;1;799;-2;865;-10;888;851;851;930;48.0;1.0;48.0;
+27;28;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];5;2;794;-2;855;-10;881;846;846;925;51.0;3.0;51.0;
+28;29;2;['SpongeBob', 'Evie'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];13;8;795;-2;845;-10;869;841;841;920;59.0;8.0;59.0;
+29;30;8;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher'];24;24;782;-2;859;-10;864;836;836;915;59.0;0.0;59.0;
+30;31;24;['SpongeBob'];1;Sample1;['SpongeBob', 'AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];43;35;748;-2;849;-10;854;826;869;910;3.0;3.0;3.0;
+31;32;35;['SpongeBob'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample2'];48;7;708;-2;839;-10;844;821;864;948;9.0;6.0;9.0;
+32;33;7;['SpongeBob', 'Sample1', 'Sample2'];1;AlwaysLauncher;['SpongeBob', 'AlwaysLauncher', 'Evie'];28;7;691;-2;857;-10;834;816;852;936;17.0;8.0;17.0;
+33;34;7;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];34;6;679;-2;847;-10;858;811;847;931;27.0;10.0;27.0;
+34;35;6;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];14;5;677;-2;837;-10;848;806;842;926;37.0;10.0;37.0;
+35;36;5;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];20;11;682;-2;827;-10;838;801;837;921;43.0;6.0;43.0;
+36;37;11;['SpongeBob'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];23;1;666;-2;817;-10;828;814;827;916;10.0;10.0;13.0;3.0
+37;38;4;['OptimizationResult', 'Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];5;1;661;-2;812;-10;818;805;818;911;23.0;10.0;23.0;
+38;39;2;['Evie'];1;Evie;['SpongeBob', 'AlwaysLauncher', 'Evie'];16;6;651;-2;802;-10;822;800;813;906;31.0;8.0;31.0;
+39;40;6;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];23;7;640;-2;792;-10;835;795;808;901;40.0;9.0;40.0;
+40;41;7;['SpongeBob'];1;Evie;['SpongeBob', 'AlwaysLauncher', 'Evie', 'Sample2'];24;10;623;-2;782;-10;849;790;803;891;41.0;1.0;41.0;
+41;42;10;['SpongeBob'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];23;7;608;-2;772;-10;839;780;816;886;6.0;6.0;6.0;
+42;43;7;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];28;41;619;-2;762;-10;829;775;811;881;16.0;10.0;16.0;
+43;44;41;['SpongeBob'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];52;2;573;-2;752;-10;819;765;853;876;8.0;8.0;14.0;6.0
+44;45;10;['OptimizationResult', 'Sample1'];1;Evie;['AlwaysLauncher', 'Evie'];11;7;568;-2;742;-10;820;750;838;871;21.0;7.0;21.0;
+45;46;7;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];52;13;556;-2;784;-10;810;745;833;866;27.0;6.0;27.0;
+46;47;13;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];22;12;555;-2;774;-10;800;740;828;861;37.0;10.0;37.0;
+47;48;12;['SpongeBob'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult'];38;23;538;-2;764;-10;790;768;823;856;1.0;1.0;1.0;
+48;49;23;['SpongeBob'];1;Sample1;['AlwaysLauncher', 'Evie', 'Sample1', 'Sample2'];70;1;510;-2;754;-10;780;763;883;846;4.0;3.0;4.0;
+49;50;4;['Sample1', 'Sample2'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];9;7;509;-2;744;-10;770;758;874;837;13.0;9.0;13.0;
+50;51;7;['SpongeBob'];1;AlwaysLauncher;['SpongeBob', 'AlwaysLauncher'];16;2;492;-2;750;-10;765;753;869;832;21.0;8.0;21.0;
+51;52;2;['SpongeBob', 'Evie'];1;Mission failure;['AlwaysLauncher', 'Evie'];26;66;485;-2;740;-10;753;748;864;827;24.0;3.0;24.0;
+52;53;66;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];104;6;513;-2;730;-10;743;738;854;817;2.0;2.0;3.0;1.0
+53;54;7;['OptimizationResult', 'Sample1', 'Sample2'];1;Evie;['AlwaysLauncher', 'Evie'];25;3;508;-2;720;-10;758;726;842;805;3.0;0.0;3.0;
+54;55;3;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher'];10;4;505;-2;710;-10;753;721;837;800;8.0;5.0;8.0;
+55;56;4;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];18;1;496;-2;718;-10;743;716;832;795;12.0;4.0;12.0;
+56;57;2;['Evie'];1;AlwaysLauncher;['SpongeBob', 'AlwaysLauncher', 'Evie'];25;3;486;-2;733;-10;731;711;827;790;18.0;6.0;18.0;
+57;58;3;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];5;3;478;-2;723;-10;726;706;822;785;19.0;1.0;19.0;
+58;59;3;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];14;3;479;-2;713;-10;716;701;817;780;23.0;4.0;23.0;
+59;60;3;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];15;1;471;-2;718;-10;706;696;812;775;32.0;9.0;32.0;
+60;61;2;['Evie'];1;Mission failure;['AlwaysLauncher'];58;14;466;-2;708;-10;699;691;807;770;37.0;5.0;37.0;
+61;62;14;['SpongeBob'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample2'];32;16;447;-2;698;-10;689;686;802;792;40.0;3.0;40.0;
+62;63;16;['SpongeBob'];1;Sample1;['SpongeBob', 'AlwaysLauncher', 'Evie', 'Sample1'];35;6;421;-2;688;-10;679;681;827;787;45.0;5.0;45.0;
+63;64;6;['SpongeBob'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult'];26;39;410;-2;678;-10;669;697;822;782;3.0;3.0;3.0;
+64;65;39;['SpongeBob'];1;Sample2;['SpongeBob', 'AlwaysLauncher', 'Evie', 'Sample1', 'Sample2'];51;6;361;-2;668;-10;659;692;812;823;13.0;10.0;13.0;
+65;66;10;['Sample1'];1;Evie;['AlwaysLauncher', 'Evie'];17;5;356;-2;658;-10;666;687;797;818;23.0;10.0;23.0;
+66;67;5;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];18;4;346;-2;666;-10;656;682;792;813;29.0;6.0;29.0;
+67;68;4;['SpongeBob'];1;Evie;['SpongeBob', 'AlwaysLauncher', 'Evie'];27;4;332;-2;656;-10;673;677;787;808;31.0;2.0;31.0;
+68;69;4;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];14;5;323;-2;646;-10;677;672;782;803;31.0;0.0;31.0;
+69;70;5;['SpongeBob'];1;Mission failure;['SpongeBob', 'AlwaysLauncher', 'Evie'];42;2;308;-2;636;-10;667;667;777;798;33.0;2.0;33.0;
+70;71;2;['SpongeBob', 'Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];19;28;301;-2;645;-10;655;662;772;793;43.0;10.0;43.0;
+71;72;28;['SpongeBob'];1;OptimizationResult;['SpongeBob', 'AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];42;14;263;-2;635;-10;645;694;762;783;8.0;8.0;8.0;
+72;73;14;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];25;1;244;-2;650;-10;635;689;757;778;14.0;6.0;14.0;
+73;74;7;['Sample1'];1;AlwaysLauncher;['SpongeBob', 'AlwaysLauncher', 'Evie'];25;0;234;-2;665;-10;625;684;745;773;22.0;8.0;22.0;
+74;75;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];9;3;229;-2;664;-10;613;679;740;768;28.0;6.0;28.0;
+75;76;3;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];24;7;221;-2;654;-10;627;674;735;763;32.0;4.0;32.0;
+76;77;7;['SpongeBob'];1;Mission failure;['SpongeBob', 'AlwaysLauncher', 'Evie'];25;21;204;-2;644;-10;617;669;730;758;37.0;5.0;37.0;
+77;78;21;['SpongeBob'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];62;12;178;-2;634;-10;607;721;720;748;6.0;6.0;6.0;
+78;79;12;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];26;4;161;-2;624;-10;623;716;715;743;11.0;5.0;11.0;
+79;80;7;['Sample1'];1;AlwaysLauncher;['SpongeBob', 'AlwaysLauncher', 'Evie'];24;5;151;-2;638;-10;613;711;703;738;17.0;6.0;17.0;
+80;81;5;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];26;2;141;-2;654;-10;603;706;698;733;20.0;3.0;20.0;
+81;82;2;['SpongeBob', 'Evie'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];11;4;140;-2;644;-10;591;701;693;728;20.0;0.0;20.0;
+82;83;4;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];15;7;131;-2;634;-10;596;696;688;723;30.0;10.0;30.0;
+83;84;7;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie', 'Sample1'];34;1;148;-2;624;-10;586;691;678;718;38.0;8.0;38.0;
+84;85;4;['Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];17;3;143;-2;631;-10;576;686;669;713;44.0;6.0;44.0;
+85;86;3;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];26;10;135;-2;647;-10;566;681;664;708;47.0;3.0;47.0;
+86;87;10;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];19;13;134;-2;637;-10;556;676;659;703;52.0;5.0;52.0;
+87;88;13;['SpongeBob'];1;Sample2;['AlwaysLauncher', 'OptimizationResult', 'Sample2'];28;1;116;-2;627;-10;551;666;654;721;8.0;8.0;11.0;3.0
+88;89;4;['OptimizationResult', 'Sample2'];1;Evie;['SpongeBob', 'AlwaysLauncher', 'Evie'];44;3;106;-2;617;-10;585;657;649;712;14.0;3.0;14.0;
+89;90;3;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];18;6;98;-2;625;-10;575;652;644;707;24.0;10.0;24.0;
+90;91;6;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Sample1'];50;6;132;-2;615;-10;570;647;634;702;26.0;2.0;26.0;
+91;92;6;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];41;5;121;-2;605;-10;601;642;629;697;31.0;5.0;31.0;
+92;93;7;['Sample1'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];15;13;126;-2;595;-10;591;637;617;692;33.0;2.0;33.0;
+93;94;13;['SpongeBob'];1;Sample2;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample2'];38;0;108;-2;585;-10;581;627;612;720;7.0;7.0;8.0;1.0
+94;95;4;['OptimizationResult', 'Sample2'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher'];15;10;113;-2;575;-10;576;618;607;711;16.0;8.0;16.0;
+95;96;10;['SpongeBob'];1;Sample1;['AlwaysLauncher', 'Evie', 'Sample1'];27;5;98;-2;565;-10;566;613;624;706;19.0;3.0;19.0;
+96;97;5;['SpongeBob'];1;Mission failure;['SpongeBob', 'AlwaysLauncher', 'Sample2'];13;9;83;-2;555;-10;561;608;619;696;24.0;5.0;24.0;
+97;98;9;['SpongeBob'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult'];22;15;69;-2;545;-10;551;620;614;691;0.0;0.0;0.0;
+98;99;15;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];28;26;72;-2;535;-10;541;615;609;686;2.0;2.0;2.0;
+99;100;26;['SpongeBob'];1;Sample1;['AlwaysLauncher', 'Evie', 'Sample1'];56;5;41;-2;525;-10;531;610;655;681;8.0;6.0;8.0;
+100;101;16;['Sample1'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];41;0;72;-2;515;-10;521;605;634;676;14.0;6.0;14.0;
+101;102;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];7;6;67;-2;512;-10;509;600;629;671;14.0;0.0;14.0;
+102;103;6;['SpongeBob'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];21;4;72;-2;502;-10;499;595;624;666;17.0;3.0;17.0;
+103;104;4;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];11;2;63;-2;503;-10;489;590;619;661;24.0;7.0;24.0;
+104;105;2;['SpongeBob', 'Evie'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];19;1;70;-2;493;-10;477;585;614;656;31.0;7.0;31.0;
+105;106;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];10;22;65;-2;483;-10;475;580;609;651;34.0;3.0;34.0;
+106;107;22;['SpongeBob'];1;Sample2;['SpongeBob', 'AlwaysLauncher', 'Evie', 'Sample2'];42;3;33;-2;473;-10;465;575;604;683;38.0;4.0;38.0;
+107;108;4;['Sample2'];1;Evie;['AlwaysLauncher', 'Evie'];8;2;28;-2;463;-10;463;570;599;674;41.0;3.0;41.0;
+108;109;2;['SpongeBob', 'Evie'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];19;6;35;-2;453;-10;451;565;594;669;48.0;7.0;48.0;
+109;110;6;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];23;1;24;-2;466;-10;441;560;589;664;51.0;3.0;51.0;
+110;111;2;['Evie'];1;SpongeBob;['SpongeBob', 'AlwaysLauncher', 'Evie'];15;8;29;-2;456;-10;429;555;584;659;54.0;3.0;54.0;
+111;112;8;['SpongeBob'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];23;6;16;-2;469;-10;419;550;579;654;62.0;8.0;62.0;
+112;113;6;['SpongeBob'];1;Evie;['AlwaysLauncher', 'Evie'];55;0;5;-2;459;-10;464;545;574;649;69.0;7.0;69.0;
+113;114;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher'];46;17;0;-2;495;-10;457;540;569;644;76.0;7.0;76.0;
+114;115;2;['Evie'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];39;16;-5;-2;485;-10;445;569;559;639;3.0;3.0;11.0;8.0
+115;116;4;['OptimizationResult', 'Sample1'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample2'];32;32;-5;-2;475;-10;435;560;550;661;16.0;5.0;18.0;2.0
+116;117;5;['OptimizationResult', 'Sample1'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];51;30;-5;-2;465;-10;425;545;586;656;9.0;9.0;9.0;
+117;118;7;['Sample2'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];48;1;-5;-2;455;-10;463;535;576;639;6.0;6.0;8.0;2.0
+118;119;9;['OptimizationResult', 'Sample1'];1;Evie;['AlwaysLauncher', 'Evie'];18;3;-5;-2;445;-10;471;521;562;634;13.0;5.0;13.0;
+119;120;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];12;5;-5;-2;447;-10;459;516;557;629;23.0;10.0;23.0;
+120;121;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];40;14;-5;-2;437;-10;487;511;552;624;33.0;10.0;33.0;
+121;122;2;['Evie'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];25;16;-5;-2;427;-10;475;501;567;619;7.0;7.0;16.0;9.0
+122;123;4;['OptimizationResult', 'Sample1'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample2'];35;11;-5;-2;417;-10;500;487;558;609;8.0;8.0;18.0;10.0
+123;124;5;['OptimizationResult', 'Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];37;1;-5;-2;444;-10;490;472;543;604;6.0;6.0;12.0;6.0
+124;125;6;['OptimizationResult', 'Sample1'];1;Evie;['AlwaysLauncher', 'Evie'];8;16;-5;-2;434;-10;488;461;532;599;16.0;4.0;16.0;
+125;126;7;['Sample1'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];26;21;-5;-2;424;-10;478;451;541;589;9.0;9.0;9.0;
+126;127;6;['Sample1'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];43;10;-5;-2;414;-10;511;441;525;584;6.0;6.0;15.0;9.0
+127;128;7;['OptimizationResult'];1;Sample2;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample2'];23;11;-5;-2;404;-10;501;424;520;597;7.0;7.0;7.0;
+128;129;8;['Sample1'];1;Evie;['AlwaysLauncher', 'Evie', 'Sample1'];30;23;-5;-2;394;-10;521;419;502;592;13.0;6.0;16.0;3.0
+129;130;9;['OptimizationResult'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample2'];48;10;-5;-2;384;-10;511;448;497;582;4.0;4.0;4.0;
+130;131;10;['Sample1', 'Sample2'];1;AlwaysLauncher;['AlwaysLauncher', 'Sample1'];21;3;-5;-2;395;-10;506;443;477;567;4.0;0.0;4.0;
+131;132;11;['Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];16;2;-5;-2;401;-10;496;438;461;562;7.0;3.0;7.0;
+132;133;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];17;0;-5;-2;391;-10;501;433;456;557;7.0;0.0;7.0;
+133;134;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher'];21;3;-5;-2;402;-10;494;428;451;552;11.0;4.0;11.0;
+134;135;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];19;9;-5;-2;411;-10;482;423;446;547;17.0;6.0;17.0;
+135;136;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie', 'Sample2'];25;1;-5;-2;401;-10;495;418;441;537;18.0;1.0;18.0;
+136;137;4;['Sample2'];1;Evie;['AlwaysLauncher', 'Evie'];8;5;-5;-2;391;-10;493;413;436;528;25.0;7.0;25.0;
+137;138;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher'];8;3;-5;-2;389;-10;486;408;431;523;31.0;6.0;31.0;
+138;139;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];13;2;-5;-2;379;-10;487;403;426;518;35.0;4.0;35.0;
+139;140;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];21;2;-5;-2;369;-10;496;398;421;513;38.0;3.0;38.0;
+140;141;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];20;5;-5;-2;359;-10;504;393;416;508;48.0;10.0;48.0;
+141;142;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];26;15;-5;-2;375;-10;492;388;411;503;57.0;9.0;57.0;
+142;143;2;['Evie'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];31;4;-5;-2;365;-10;480;409;401;498;7.0;7.0;14.0;7.0
+143;144;4;['OptimizationResult', 'Sample1'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample2'];34;17;-5;-2;355;-10;470;400;392;522;16.0;2.0;16.0;
+144;145;5;['Sample1'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];28;11;-5;-2;345;-10;460;390;405;517;8.0;8.0;8.0;
+145;146;7;['Sample2'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample2'];22;6;-5;-2;335;-10;450;385;400;522;13.0;5.0;13.0;
+146;147;7;['Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];20;5;-5;-2;345;-10;440;380;388;517;21.0;8.0;21.0;
+147;148;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher'];11;0;-5;-2;346;-10;433;375;383;512;26.0;5.0;26.0;
+148;149;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];14;6;-5;-2;336;-10;435;370;378;507;35.0;9.0;35.0;
+149;150;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];14;4;-5;-2;326;-10;437;365;373;502;38.0;3.0;38.0;
+150;151;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];61;9;-5;-2;316;-10;486;360;368;497;43.0;5.0;43.0;
+151;152;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult'];100;67;-5;-2;306;-10;574;350;363;492;5.0;5.0;15.0;10.0
+152;153;4;['OptimizationResult', 'Sample1'];1;Sample2;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];92;2;-5;-2;296;-10;564;336;349;574;9.0;9.0;14.0;5.0
+153;154;5;['OptimizationResult', 'Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];12;37;-5;-2;298;-10;554;326;339;569;20.0;6.0;;
+154;155;7;['Sample2'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];46;1;-5;-2;288;-10;590;316;329;552;0.0;0.0;6.0;6.0
+155;156;9;['OptimizationResult', 'Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];6;7;-5;-2;284;-10;580;302;315;547;10.0;4.0;10.0;
+156;157;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];14;23;-5;-2;288;-10;568;297;310;542;20.0;10.0;20.0;
+157;158;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult'];35;5;-5;-2;278;-10;591;287;305;537;5.0;5.0;9.0;4.0
+158;159;4;['OptimizationResult'];1;Evie;['AlwaysLauncher', 'Evie'];15;7;-5;-2;268;-10;596;278;300;532;19.0;10.0;19.0;
+159;160;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];19;10;-5;-2;277;-10;584;273;295;527;29.0;10.0;29.0;
+160;161;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];36;9;-5;-2;267;-10;608;268;290;522;39.0;10.0;39.0;
+161;162;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];38;3;-5;-2;295;-10;596;263;285;517;39.0;0.0;39.0;
+162;163;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];9;3;-5;-2;285;-10;593;258;280;512;49.0;10.0;49.0;
+163;164;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];20;7;-5;-2;295;-10;581;253;275;507;59.0;10.0;59.0;
+164;165;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];25;0;-5;-2;285;-10;594;248;270;502;69.0;10.0;69.0;
+165;166;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];11;4;-5;-2;275;-10;593;243;265;497;76.0;7.0;76.0;
+166;167;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];16;13;-5;-2;281;-10;581;238;260;492;83.0;7.0;83.0;
+167;168;2;['Evie'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];38;4;-5;-2;271;-10;569;228;288;487;7.0;7.0;10.0;3.0
+168;169;4;['OptimizationResult', 'Sample1'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample2'];16;0;-5;-2;261;-10;559;219;279;493;18.0;8.0;18.0;
+169;170;4;['Sample2'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];5;12;-5;-2;256;-10;549;214;274;484;22.0;4.0;22.0;
+170;171;2;['Evie'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];24;13;-5;-2;246;-10;537;228;264;479;3.0;3.0;4.0;1.0
+171;172;4;['OptimizationResult', 'Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie', 'Sample2'];30;25;-5;-2;266;-10;527;219;255;469;7.0;3.0;17.0;10.0
+172;173;5;['OptimizationResult', 'Sample1'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];53;16;-5;-2;256;-10;517;204;293;464;10.0;10.0;10.0;
+173;174;7;['Sample2'];1;Sample2;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample2'];45;38;-5;-2;246;-10;507;194;288;492;8.0;8.0;15.0;7.0
+174;175;9;['OptimizationResult', 'Sample1'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];60;16;-5;-2;236;-10;497;175;329;487;9.0;9.0;18.0;9.0
+175;176;10;['OptimizationResult', 'Sample1'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult'];28;45;-5;-2;226;-10;487;183;314;482;1.0;1.0;1.0;
+176;177;12;['Sample2'];1;Sample1;['AlwaysLauncher', 'Evie', 'Sample1'];158;5;-5;-2;216;-10;477;178;462;465;8.0;7.0;8.0;
+177;178;14;['Sample1'];1;Evie;['AlwaysLauncher', 'Evie'];10;47;-5;-2;206;-10;477;173;443;460;8.0;0.0;8.0;
+178;179;13;['Sample1'];1;Sample1;['AlwaysLauncher', 'Evie', 'Sample1', 'Sample2'];60;31;-5;-2;196;-10;467;168;480;450;11.0;3.0;11.0;
+179;180;12;['Sample1'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1'];42;18;-5;-2;186;-10;457;200;458;445;3.0;3.0;3.0;
+180;181;11;['Sample1'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample1', 'Sample2'];27;0;-5;-2;176;-10;447;195;437;462;9.0;6.0;9.0;
+181;182;10;['Sample2'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];11;77;-5;-2;177;-10;437;190;432;447;14.0;5.0;;
+182;183;9;['Sample2'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];88;8;-5;-2;167;-10;427;268;422;428;5.0;5.0;5.0;
+183;184;8;['Sample1', 'Sample2'];1;Evie;['AlwaysLauncher', 'Evie', 'Sample1'];18;7;-5;-2;157;-10;435;263;404;415;5.0;0.0;5.0;
+184;185;9;['Sample1'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];17;2;-5;-2;164;-10;425;258;390;410;7.0;2.0;7.0;
+185;186;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher'];17;15;-5;-2;171;-10;418;253;385;405;12.0;5.0;12.0;
+186;187;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];28;4;-5;-2;189;-10;406;248;380;400;16.0;4.0;16.0;
+187;188;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher'];26;7;-5;-2;205;-10;399;243;375;395;26.0;10.0;26.0;
+188;189;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];12;12;-5;-2;195;-10;399;238;370;390;30.0;4.0;30.0;
+189;190;2;['Evie'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample1', 'Sample2'];26;6;-5;-2;185;-10;387;233;360;406;37.0;7.0;37.0;
+190;191;4;['Sample1', 'Sample2'];1;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult'];27;7;-5;-2;175;-10;377;250;351;397;10.0;10.0;19.0;9.0
+191;192;4;['OptimizationResult'];1;Evie;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample2'];26;1;-5;-2;165;-10;393;236;346;387;10.0;10.0;10.0;
+192;193;4;['Sample2'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];8;4;-5;-2;163;-10;383;231;341;378;14.0;4.0;14.0;
+193;194;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];9;5;-5;-2;162;-10;371;226;336;373;18.0;4.0;18.0;
+194;195;2;['Evie'];1;AlwaysLauncher;['AlwaysLauncher', 'Evie'];11;4;-5;-2;163;-10;359;221;331;368;27.0;9.0;27.0;
+195;196;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];10;1;-5;-2;153;-10;357;216;326;363;34.0;7.0;34.0;
+196;197;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];6;4;-5;-2;143;-10;351;211;321;358;41.0;7.0;41.0;
+197;198;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];8;35;-5;-2;133;-10;347;206;316;353;49.0;8.0;;
+198;199;4;['OptimizationResult'];1;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];81;1;-5;-2;123;-10;337;192;387;343;9.0;9.0;;
+199;199;4;['Sample1', 'Sample2'];2;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];81;1;-5;-2;123;-10;337;192;383;339;;;9.0;
+200;199;5;['Sample1'];3;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];81;1;-5;-2;123;-10;337;192;378;339;;;9.0;
+201;199;2;['Evie'];4;Sample1;['AlwaysLauncher', 'Evie', 'OptimizationResult', 'Sample1', 'Sample2'];81;1;-5;-2;123;-10;335;192;378;339;;;9.0;
+202;200;2;['Evie'];1;Evie;['AlwaysLauncher', 'Evie'];29;5;-5;-2;113;-10;352;187;373;334;14.0;5.0;14.0;
+203;201;2;['Evie'];1;Sample2;['AlwaysLauncher', 'Evie', 'Sample1', 'Sample2'];30;7;-5;-2;103;-10;340;182;363;354;23.0;9.0;23.0;
+204;201;4;['Sample1', 'Sample2'];;OptimizationResult;['AlwaysLauncher', 'Evie', 'OptimizationResult'];45;7;-5;-2;98;-10;335;222;359;350;;;;

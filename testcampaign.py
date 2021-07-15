@@ -173,11 +173,11 @@ def getWinChances(outdir):
 
 
 if __name__ == "__main__":
-    # plotpie(getWinChances('testdata\campaign_20210709_220945_test')) #Only OptimizationResult
-    # plotpie(getWinChances('testdata\campaign_20210709_225024_test')) # + Sample 1 v2
-    # plotpie(getWinChances('testdata\campaign_20210710_004920_test'))  # + Sample 2
-    # plotpie(getWinChances('testdata\campaign_20210709_234217_test'))  # + Sample 1 + Sample 2
-    plotpie(getWinChances('serverdata\campaign_20210712_002745')) #after reoptimize
+    plotpie(getWinChances('testdata\campaign_20210709_220945_test')) #Only OptimizationResult
+    plotpie(getWinChances('testdata\campaign_20210709_225024_test')) # + Sample 1 
+    plotpie(getWinChances('testdata\campaign_20210710_004920_test')) # + Sample 2
+    plotpie(getWinChances('testdata\campaign_20210709_234217_test')) # + Sample 1 + Sample 2
+    plotpie(getWinChances('testdata\campaign_20210712_002745')) #after reoptimize
 
     plt.show()
     # plotpie(getWinChances('data\campaign_20210710_015044'))
